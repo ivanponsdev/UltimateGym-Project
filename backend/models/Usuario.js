@@ -19,7 +19,8 @@ const usuarioSchema = new mongoose.Schema({
 },
   role: { type: String, enum: ['user','admin'], default: 'user' },
   fechaBaja: { type: Date, default: null }, // null = usuario activo
-  primerAcceso: { type: Boolean, default: true } // true = primer acceso después del registro
+  primerAcceso: { type: Boolean, default: true }, // true = primer acceso después del registro
+  requiereActualizacionContraseña: { type: Boolean, default: false } // true = debe cambiar contraseña (admin la creó/cambió)
 }, { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } });
 
 module.exports = mongoose.model('Usuario', usuarioSchema);

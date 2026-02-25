@@ -1,7 +1,5 @@
 /* Modo Accesible */
 /* Sin efectos neón, blur o luminosos */
-
-
 body.accesible {
   background: #000 !important;
   color: #fff !important;

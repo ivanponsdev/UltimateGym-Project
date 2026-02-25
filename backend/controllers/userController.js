@@ -36,7 +36,8 @@ const loginUser = async (req, res) => {
                 objetivo: user.objetivo,
                 objetivoClasesSemana: user.objetivoClasesSemana,
                 role: user.role,
-                primerAcceso: user.primerAcceso,
+                primerAcceso: user.primerAcceso || false,
+                requiereActualizacionContraseña: user.requiereActualizacionContraseña || false,
                 createdAt: user.createdAt
             }
         });
@@ -49,8 +50,14 @@ const loginUser = async (req, res) => {
 // GET /api/users → listar todos los usuarios
 const getUsers = async (req, res) => {
   try {
-    const users = await User.find().select('-password -_id');
-    res.json({ usuarios: users });
+    const users = await User.find().select('-password');
+    // Asegurar que los campos booleanos tengan valores por defecto
+    const usuariosConDefaults = users.map(u => ({
+      ...u.toObject(),
+      primerAcceso: u.primerAcceso || false,
+      requiereActualizacionContraseña: u.requiereActualizacionContraseña || false
+    }));
+    res.json({ usuarios: usuariosConDefaults });
   } catch (error) {
     res.status(500).json({ message: 'Error al obtener usuarios' });
   }
@@ -99,6 +106,8 @@ const createUser = async (req, res) => {
       nombre,
       email,
       password: hashedPassword,
+      primerAcceso: true, // Solo true para nuevos usuarios que se registran
+      requiereActualizacionContraseña: false
     });
 
     const savedUser = await newUser.save();
@@ -118,7 +127,8 @@ const createUser = async (req, res) => {
             objetivo: savedUser.objetivo,
             objetivoClasesSemana: savedUser.objetivoClasesSemana,
             role: savedUser.role,
-            primerAcceso: savedUser.primerAcceso,
+            primerAcceso: savedUser.primerAcceso || false,
+            requiereActualizacionContraseña: savedUser.requiereActualizacionContraseña || false,
             createdAt: savedUser.createdAt
         }
     });
@@ -188,6 +198,8 @@ const updateUser = async (req, res) => {
             }
             const salt = await bcrypt.genSalt(10);
             user.password = await bcrypt.hash(password, salt);
+            // Marcar que el usuario debe actualizar la contraseña (admin la cambió)
+            user.requiereActualizacionContraseña = true;
         }
 
         const updatedUser = await user.save();
@@ -196,12 +208,15 @@ const updateUser = async (req, res) => {
         res.json({
             mensaje: 'Usuario actualizado correctamente',
             usuario: {
+                _id: updatedUser._id,
                 nombre: updatedUser.nombre,
                 email: updatedUser.email,
                 edad: updatedUser.edad,
                 sexo: updatedUser.sexo,
                 objetivo: updatedUser.objetivo,
                 role: updatedUser.role,
+                primerAcceso: updatedUser.primerAcceso || false,
+                requiereActualizacionContraseña: updatedUser.requiereActualizacionContraseña || false,
                 createdAt: updatedUser.createdAt
             }
         });
@@ -348,6 +363,10 @@ const updateProfile = async (req, res) => {
             }
             const salt = await bcrypt.genSalt(10);
             user.password = await bcrypt.hash(password, salt);
+            // Si requería actualización de contraseña, marcar como completado
+            if (user.requiereActualizacionContraseña) {
+                user.requiereActualizacionContraseña = false;
+            }
         }
 
         const updatedUser = await user.save();
@@ -366,7 +385,8 @@ const updateProfile = async (req, res) => {
                 objetivo: updatedUser.objetivo,
                 objetivoClasesSemana: updatedUser.objetivoClasesSemana,
                 role: updatedUser.role,
-                primerAcceso: updatedUser.primerAcceso,
+                primerAcceso: updatedUser.primerAcceso || false,
+                requiereActualizacionContraseña: updatedUser.requiereActualizacionContraseña || false,
                 createdAt: updatedUser.createdAt
             }
         });

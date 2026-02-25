@@ -314,6 +314,7 @@ const Dashboard = () => {
   const [isEditingProfile, setIsEditingProfile] = useState(false)
   const [isFirstAccess, setIsFirstAccess] = useState(false) // Primera vez después del registro
   const [hasCompletedFirstSetup, setHasCompletedFirstSetup] = useState(false) // Ya guardó la primera vez
+  const [requiresPasswordChange, setRequiresPasswordChange] = useState(false) // Admin cambió contraseña
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
   const [profileData, setProfileData] = useState({
     nombre: '',
@@ -373,8 +374,13 @@ const Dashboard = () => {
         objetivoClasesSemana: user.objetivoClasesSemana || 5
       })
       
-      // Si es el primer acceso, abrir modal automáticamente y marcar como primer acceso
-      if (user.primerAcceso && !hasCompletedFirstSetup) {
+      // Si requiere actualización de contraseña (admin la cambió)
+      if (user.requiereActualizacionContraseña === true) {
+        setRequiresPasswordChange(true)
+        setIsEditingProfile(true)
+      }
+      // Si es el primer acceso después del registro (solo usuarios nuevos)
+      else if (user.primerAcceso === true && !hasCompletedFirstSetup) {
         setIsFirstAccess(true)
         setIsEditingProfile(true)
         // Validar inmediatamente los campos
@@ -469,16 +475,37 @@ const Dashboard = () => {
       })
       return
     }
+    if (requiresPasswordChange && newSection !== 'profile') {
+      setModalConfig({
+        isOpen: true,
+        type: 'alert',
+        message: 'Debes cambiar tu contraseña antes de acceder a otras secciones. Es obligatorio por razones de seguridad.',
+        iconType: 'warning',
+        onConfirm: null
+      })
+      return
+    }
     setActiveSection(newSection)
   }
 
   const handleCancelEdit = () => {
-    // No permitir cerrar sin guardar en el primer acceso
+    // No permitir cerrar sin guardar en el primer acceso ni cuando se requiere cambio de contraseña
     if (isFirstAccess) {
       setModalConfig({
         isOpen: true,
         type: 'alert',
         message: 'Debes completar tu perfil antes de continuar. Por favor rellena todos los campos obligatorios.',
+        iconType: 'warning',
+        onConfirm: null
+      })
+      return
+    }
+    
+    if (requiresPasswordChange) {
+      setModalConfig({
+        isOpen: true,
+        type: 'alert',
+        message: 'Debes cambiar tu contraseña antes de continuar. Por razones de seguridad, es obligatorio cambiarla.',
         iconType: 'warning',
         onConfirm: null
       })
@@ -605,16 +632,34 @@ const Dashboard = () => {
     // Validar campos obligatorios
     const errors = { ...validationErrors }
     
-    errors.edad = validateEdad(profileData.edad)
-    if (!profileData.sexo || profileData.sexo === '') {
-      errors.sexo = 'El sexo es obligatorio'
+    // Si requiere cambio de contraseña, obligar a cambiarla
+    if (requiresPasswordChange) {
+      if (!profileData.password || profileData.password === '') {
+        errors.password = 'Debes cambiar tu contraseña'
+      }
+      if (!profileData.confirmPassword || profileData.confirmPassword === '') {
+        errors.confirmPassword = 'Debes confirmar la nueva contraseña'
+      }
+      // Validar que la nueva contraseña sea válida
+      if (profileData.password) {
+        errors.password = validatePassword(profileData.password)
+      }
+      if (profileData.password !== profileData.confirmPassword) {
+        errors.confirmPassword = 'Las contraseñas no coinciden'
+      }
     } else {
-      errors.sexo = ''
-    }
-    if (!profileData.objetivo || profileData.objetivo === '') {
-      errors.objetivo = 'El objetivo es obligatorio'
-    } else {
-      errors.objetivo = ''
+      // Validación normal de perfil
+      errors.edad = validateEdad(profileData.edad)
+      if (!profileData.sexo || profileData.sexo === '') {
+        errors.sexo = 'El sexo es obligatorio'
+      } else {
+        errors.sexo = ''
+      }
+      if (!profileData.objetivo || profileData.objetivo === '') {
+        errors.objetivo = 'El objetivo es obligatorio'
+      } else {
+        errors.objetivo = ''
+      }
     }
     
     setValidationErrors(errors)
@@ -644,6 +689,11 @@ const Dashboard = () => {
       // Guardar nuevo token si se devuelve (especialmente importante si cambió el objetivo)
       if (response.token) {
         localStorage.setItem('token', response.token)
+      }
+      
+      // Si requería cambio de contraseña, marcar como completado
+      if (requiresPasswordChange) {
+        setRequiresPasswordChange(false)
       }
       
       // Si es el primer acceso, marcar como completado
