@@ -1,0 +1,395 @@
+// backend/controllers/userController.js
+const User = require('../models/Usuario');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const JWT_SECRET = process.env.JWT_SECRET || 'devsecret';
+
+// POST /api/users/login -> autenticar un usuario
+const loginUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Email y contraseña son requeridos' });
+        }
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Credenciales inválidas' });
+        }
+
+        // Firmar un token y devolverlo junto al usuario (sin contraseña)
+        const payload = { id: user._id, role: user.role, objetivo: user.objetivo };
+        const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+        res.json({
+            token,
+            usuario: {
+                nombre: user.nombre,
+                email: user.email,
+                edad: user.edad,
+                sexo: user.sexo,
+                objetivo: user.objetivo,
+                objetivoClasesSemana: user.objetivoClasesSemana,
+                role: user.role,
+                primerAcceso: user.primerAcceso,
+                createdAt: user.createdAt
+            }
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: 'Error en el servidor al iniciar sesión', error: error.message });
+    }
+};
+
+// GET /api/users → listar todos los usuarios
+const getUsers = async (req, res) => {
+  try {
+    const users = await User.find().select('-password -_id');
+    res.json({ usuarios: users });
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener usuarios' });
+  }
+};
+
+// POST /api/users  crear un nuevo usuario
+const createUser = async (req, res) => {
+  try {
+    const { nombre, email, password } = req.body;
+
+    if (!nombre || !email || !password) {
+        return res.status(400).json({ message: 'Nombre, email y contraseña son requeridos' });
+    }
+
+    // Validar nombre (mínimo 2 palabras)
+    const nombreRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ]+\s+[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+    if (!nombreRegex.test(nombre.trim())) {
+        return res.status(400).json({ 
+            message: 'El nombre debe contener al menos nombre y apellido (mínimo 2 palabras)' 
+        });
+    }
+
+    // Validar email con formato más estricto
+    const emailRegex = /^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email) || email.endsWith('.') || email.includes('..')) {
+        return res.status(400).json({ 
+            message: 'El formato del email no es válido. Asegúrate de que tenga el formato: usuario@dominio.com' 
+        });
+    }
+
+    // Validar contraseña robusta: mínimo 8 caracteres, al menos una mayúscula, una minúscula y un número
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!passwordRegex.test(password)) {
+        return res.status(400).json({ 
+            message: 'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número' 
+        });
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) return res.status(400).json({ message: 'El correo electrónico ya está en uso' });
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = new User({
+      nombre,
+      email,
+      password: hashedPassword,
+    });
+
+    const savedUser = await newUser.save();
+    
+    // Generar token JWT para auto-login después del registro
+    const payload = { id: savedUser._id, role: savedUser.role, objetivo: savedUser.objetivo };
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+    
+    res.status(201).json({ 
+        message: 'Usuario creado correctamente',
+        token,
+        usuario: {
+            nombre: savedUser.nombre,
+            email: savedUser.email,
+            edad: savedUser.edad,
+            sexo: savedUser.sexo,
+            objetivo: savedUser.objetivo,
+            objetivoClasesSemana: savedUser.objetivoClasesSemana,
+            role: savedUser.role,
+            primerAcceso: savedUser.primerAcceso,
+            createdAt: savedUser.createdAt
+        }
+    });
+  } catch (error) {
+    // Manejar errores de validación de Mongoose
+    if (error.name === 'ValidationError') {
+      const mensajesError = Object.values(error.errors).map(e => e.message);
+      return res.status(400).json({ 
+        message: 'Error de validación', 
+        errores: mensajesError 
+      });
+    }
+    
+    // Manejar error de email duplicado
+    if (error.code === 11000) {
+      return res.status(400).json({ 
+        message: 'El correo electrónico ya está en uso' 
+      });
+    }
+    
+    res.status(500).json({ message: 'Error al crear usuario', error: error.message });
+  }
+};
+
+// PUT /api/users/:id -> actualizar un usuario
+const updateUser = async (req, res) => {
+    try {
+        const { nombre, email, password, edad, sexo, objetivo, role } = req.body;
+        const user = await User.findById(req.params.id);
+
+        if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
+
+        // Validar nombre si se proporciona
+        if (nombre) {
+            const nombreRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ]+\s+[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+            if (!nombreRegex.test(nombre.trim())) {
+                return res.status(400).json({ 
+                    message: 'El nombre debe contener al menos nombre y apellido (mínimo 2 palabras)' 
+                });
+            }
+        }
+
+        // Validar email si se proporciona
+        if (email && email !== user.email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                return res.status(400).json({ 
+                    message: 'El formato del email no es válido' 
+                });
+            }
+        }
+
+        user.nombre = nombre || user.nombre;
+        user.email = email || user.email;
+        user.edad = edad || user.edad;
+        user.sexo = sexo || user.sexo;
+        user.objetivo = objetivo || user.objetivo;
+        if (role) user.role = role;
+
+        if (password) {
+            // Validar contraseña robusta si se proporciona
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+            if (!passwordRegex.test(password)) {
+                return res.status(400).json({ 
+                    message: 'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número' 
+                });
+            }
+            const salt = await bcrypt.genSalt(10);
+            user.password = await bcrypt.hash(password, salt);
+        }
+
+        const updatedUser = await user.save();
+        
+        // Devolver el usuario completo (sin contraseña y sin _id) para actualizar el estado en el frontend
+        res.json({
+            mensaje: 'Usuario actualizado correctamente',
+            usuario: {
+                nombre: updatedUser.nombre,
+                email: updatedUser.email,
+                edad: updatedUser.edad,
+                sexo: updatedUser.sexo,
+                objetivo: updatedUser.objetivo,
+                role: updatedUser.role,
+                createdAt: updatedUser.createdAt
+            }
+        });
+
+    } catch (error) {
+        // Manejar errores de validación de Mongoose
+        if (error.name === 'ValidationError') {
+            const mensajesError = Object.values(error.errors).map(e => e.message);
+            return res.status(400).json({ 
+                message: 'Error de validación', 
+                errores: mensajesError 
+            });
+        }
+
+        // Manejar error de email duplicado
+        if (error.code === 11000) {
+            return res.status(400).json({ 
+                message: 'El correo electrónico ya está en uso' 
+            });
+        }
+
+        res.status(500).json({ message: 'Error al actualizar usuario', error: error.message });
+    }
+};
+
+// DELETE /api/users/:id -> eliminar un usuario (solo admin)
+const deleteUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
+
+        await user.deleteOne(); 
+        res.json({ message: 'Usuario eliminado correctamente' });
+
+    } catch (error) {
+        res.status(500).json({ message: 'Error al eliminar usuario', error: error.message });
+    }
+};
+
+// DELETE /api/users/me -> eliminar cuenta propia
+const deleteMyAccount = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
+
+        await user.deleteOne(); 
+        res.json({ message: 'Cuenta eliminada correctamente' });
+
+    } catch (error) {
+        res.status(500).json({ message: 'Error al eliminar cuenta', error: error.message });
+    }
+};
+
+// GET /api/users/profile -> obtener perfil del usuario autenticado
+const getProfile = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select('-password');
+        if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
+
+        res.json({ 
+            usuario: {
+                nombre: user.nombre,
+                email: user.email,
+                edad: user.edad,
+                sexo: user.sexo,
+                objetivo: user.objetivo,
+                objetivoClasesSemana: user.objetivoClasesSemana,
+                role: user.role,
+                createdAt: user.createdAt
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Error al obtener perfil', error: error.message });
+    }
+};
+
+// PUT /api/users/profile -> actualizar perfil del usuario autenticado
+const updateProfile = async (req, res) => {
+    try {
+        const { nombre, email, password, edad, sexo, objetivo, objetivoClasesSemana } = req.body;
+        const user = await User.findById(req.user.id);
+
+        if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
+
+        // Validar nombre si se proporciona
+        if (nombre) {
+            const nombreRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ]+\s+[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+            if (!nombreRegex.test(nombre.trim())) {
+                return res.status(400).json({ 
+                    message: 'El nombre debe contener al menos nombre y apellido (mínimo 2 palabras)' 
+                });
+            }
+        }
+
+        // Validar email si se proporciona
+        if (email && email !== user.email) {
+            const emailRegex = /^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailRegex.test(email) || email.endsWith('.') || email.includes('..')) {
+                return res.status(400).json({ 
+                    message: 'El formato del email no es válido. Asegúrate de que tenga el formato: usuario@dominio.com' 
+                });
+            }
+        }
+
+        // Validar edad si se proporciona
+        if (edad !== undefined && edad !== null && edad !== '') {
+            const edadNum = parseInt(edad);
+            if (isNaN(edadNum)) {
+                return res.status(400).json({ 
+                    message: 'La edad debe ser un número válido' 
+                });
+            }
+            if (edadNum < 14) {
+                return res.status(400).json({ 
+                    message: 'La edad mínima permitida es 14 años' 
+                });
+            }
+            if (edadNum > 100) {
+                return res.status(400).json({ 
+                    message: 'La edad máxima permitida es 100 años' 
+                });
+            }
+        }
+
+        user.nombre = nombre || user.nombre;
+        user.email = email || user.email;
+        user.edad = edad !== undefined ? edad : user.edad;
+        user.sexo = sexo || user.sexo;
+        user.objetivo = objetivo || user.objetivo;
+        user.objetivoClasesSemana = objetivoClasesSemana !== undefined ? objetivoClasesSemana : user.objetivoClasesSemana;
+
+        // Si es el primer acceso y se guardan los datos, marcar como completado
+        if (user.primerAcceso && nombre && edad && sexo && objetivo) {
+            user.primerAcceso = false;
+        }
+
+        if (password) {
+            // Validar contraseña robusta si se proporciona
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+            if (!passwordRegex.test(password)) {
+                return res.status(400).json({ 
+                    message: 'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número' 
+                });
+            }
+            const salt = await bcrypt.genSalt(10);
+            user.password = await bcrypt.hash(password, salt);
+        }
+
+        const updatedUser = await user.save();
+        
+        // Generar nuevo token con los datos actualizados (especialmente objetivo)
+        const newPayload = { id: updatedUser._id, role: updatedUser.role, objetivo: updatedUser.objetivo };
+        const newToken = jwt.sign(newPayload, JWT_SECRET, { expiresIn: '7d' });
+        
+        res.json({
+            token: newToken,
+            usuario: {
+                nombre: updatedUser.nombre,
+                email: updatedUser.email,
+                edad: updatedUser.edad,
+                sexo: updatedUser.sexo,
+                objetivo: updatedUser.objetivo,
+                objetivoClasesSemana: updatedUser.objetivoClasesSemana,
+                role: updatedUser.role,
+                primerAcceso: updatedUser.primerAcceso,
+                createdAt: updatedUser.createdAt
+            }
+        });
+
+    } catch (error) {
+        // Manejar errores de validación de Mongoose
+        if (error.name === 'ValidationError') {
+            const mensajesError = Object.values(error.errors).map(e => e.message);
+            return res.status(400).json({ 
+                message: 'Error de validación', 
+                errores: mensajesError 
+            });
+        }
+
+        // Manejar error de email duplicado
+        if (error.code === 11000) {
+            return res.status(400).json({ 
+                message: 'El correo electrónico ya está en uso' 
+            });
+        }
+
+        res.status(500).json({ message: 'Error al actualizar perfil', error: error.message });
+    }
+};
+
+module.exports = { loginUser, getUsers, createUser, updateUser, deleteUser, deleteMyAccount, getProfile, updateProfile };

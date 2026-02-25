@@ -1,0 +1,43 @@
+{
+  "name": "gym-app-fase1-usuarios",
+  "version": "1.0.0",
+  "description": "Fase 1: Sistema de gestión de usuarios con autenticación JWT y bcrypt",
+  "main": "server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev:all": "concurrently \"node backend/server.js\" \"npm run dev:frontend\"",
+    "dev:frontend": "vite",
+    "build:frontend": "vite build",
+    "preview:frontend": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.13.2",
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.19.2",
+    "multer": "^2.0.2",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.9.5",
+    "recharts": "^3.6.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.2.1",
+    "nodemon": "^3.1.10",
+    "vite": "^5.4.11"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "mongodb",
+    "jwt",
+    "bcryptjs",
+    "usuarios",
+    "autenticacion"
+  ],
+  "author": "Tu Nombre",
+  "license": "MIT"
+}
