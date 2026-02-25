@@ -32,6 +32,13 @@ export const AuthProvider = ({ children }) => {
   }, [])
 
   const login = (userData, token) => {
+    // Limpiar sessionStorage antes de hacer login para evitar datos obsoletos
+    sessionStorage.removeItem('clases')
+    sessionStorage.removeItem('misClases')
+    sessionStorage.removeItem('adminUsers')
+    sessionStorage.removeItem('ejercicios')
+    sessionStorage.removeItem('guias')
+    
     localStorage.setItem('token', token)
     localStorage.setItem('user', JSON.stringify(userData))
     setUser(userData)
@@ -40,6 +47,12 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
+    // Limpiar también sessionStorage para evitar que un nuevo usuario vea datos del anterior
+    sessionStorage.removeItem('clases')
+    sessionStorage.removeItem('misClases')
+    sessionStorage.removeItem('adminUsers')
+    sessionStorage.removeItem('ejercicios')
+    sessionStorage.removeItem('guias')
     setUser(null)
   }
 

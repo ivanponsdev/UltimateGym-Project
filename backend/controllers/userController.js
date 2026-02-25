@@ -248,8 +248,31 @@ const deleteUser = async (req, res) => {
         const user = await User.findById(req.params.id);
         if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
 
+        const userId = user._id;
+
+        // 1. Eliminar registro de InteraccionPaco asociado
+        const InteraccionPaco = require('../models/InteraccionPaco');
+        const interaccionesEliminadas = await InteraccionPaco.deleteMany({ usuario: userId });
+        console.log(`InteraccionPaco: ${interaccionesEliminadas.deletedCount} registros eliminados`);
+
+        // 2. Remover usuario de todas las clases donde está inscrito
+        const Clase = require('../models/Clase');
+        const clasesActualizadas = await Clase.updateMany(
+            { alumnosApuntados: userId },
+            { $pull: { alumnosApuntados: userId } }
+        );
+        console.log(`Clase: ${clasesActualizadas.modifiedCount} clases actualizadas (usuario removido)`);
+
+        // 3. Eliminar al usuario
         await user.deleteOne(); 
-        res.json({ message: 'Usuario eliminado correctamente' });
+        
+        res.json({ 
+            message: 'Usuario eliminado correctamente',
+            limpieza: {
+                interaccionesPacoEliminadas: interaccionesEliminadas.deletedCount,
+                clasesActualizadas: clasesActualizadas.modifiedCount
+            }
+        });
 
     } catch (error) {
         res.status(500).json({ message: 'Error al eliminar usuario', error: error.message });
@@ -262,8 +285,29 @@ const deleteMyAccount = async (req, res) => {
         const user = await User.findById(req.user.id);
         if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
 
+        const userId = user._id;
+
+        // 1. Eliminar registro de InteraccionPaco asociado
+        const InteraccionPaco = require('../models/InteraccionPaco');
+        const interaccionesEliminadas = await InteraccionPaco.deleteMany({ usuario: userId });
+
+        // 2. Remover usuario de todas las clases donde está inscrito
+        const Clase = require('../models/Clase');
+        const clasesActualizadas = await Clase.updateMany(
+            { alumnosApuntados: userId },
+            { $pull: { alumnosApuntados: userId } }
+        );
+
+        // 3. Eliminar la cuenta
         await user.deleteOne(); 
-        res.json({ message: 'Cuenta eliminada correctamente' });
+        
+        res.json({ 
+            message: 'Cuenta eliminada correctamente',
+            limpieza: {
+                interaccionesPacoEliminadas: interaccionesEliminadas.deletedCount,
+                clasesActualizadas: clasesActualizadas.modifiedCount
+            }
+        });
 
     } catch (error) {
         res.status(500).json({ message: 'Error al eliminar cuenta', error: error.message });

@@ -245,10 +245,14 @@ const deleteClase = async (req, res) => {
       return res.status(404).json({ message: 'Clase no encontrada' });
     }
     
-    // Informar si hay alumnos apuntados antes de eliminar
-    const alumnosAfectados = clase.alumnosApuntados.length;
-
+    // Obtener lista de alumnos afectados antes de eliminar
+    const alumnosApuntados = clase.alumnosApuntados || [];
+    const cantidadAlumnosAfectados = alumnosApuntados.length;
     
+    // Opcional: guardar un registro de auditoría o notificación (para futuras implementaciones)
+    // Los usuarios tendrían que recargar su lista de clases para ver que fue eliminada
+    
+    // Eliminar la clase
     await Clase.findByIdAndDelete(req.params.id);
     
     res.json({ 
@@ -256,8 +260,10 @@ const deleteClase = async (req, res) => {
       claseEliminada: {
         _id: clase._id,
         nombre: clase.nombre,
-        alumnosAfectados
-      }
+        alumnosAfectados: cantidadAlumnosAfectados,
+        alumnosIds: alumnosApuntados
+      },
+      notaAdmin: `Se han afectado ${cantidadAlumnosAfectados} alumno(s). Considerar notificación manual si es necesario.`
     });
   } catch (error) {
     console.error('Error al eliminar clase:', error);
