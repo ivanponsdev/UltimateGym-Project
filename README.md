@@ -1,12 +1,4 @@
-# UltimateGym
-
-**Autor:** Iván Pons Martínez
-
-[![Licencia: CC BY-NC-ND 4.0](https://img.shields.io/badge/Licencia-CC%20BY--NC--ND%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
-
-> **Licencia:**
-> Este proyecto es solo para fines educativos y de portfolio. Puedes clonar, probar y aprender, pero **no puedes venderlo ni publicarlo como proyecto propio**  Más info en el archivo LICENSE. Para cualquiera de estas acciones comerciales, puedes contactar conmigo a través de mis canales.
-
+# UltimateGym  **Autor:** Iván Pons Martínez  Linkedin: www.linkedin.com/in/iván-pons-martínez-617609183
 ¡Bienvenido/a a UltimateGym! 🏋️‍♂️
 
 Este es mi proyecto fullstack para aprender, practicar y enseñar cómo montar una app de gimnasio moderna, con frontend en React (Vite) y backend Node.js/Express/MongoDB. Si eres recruiter, compi dev o simplemente te gusta, aquí tienes un ejemplo realista y funcional.
