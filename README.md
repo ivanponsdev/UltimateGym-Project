@@ -1,7 +1,7 @@
 # UltimateGym  **Autor:** Iván Pons Martínez  Linkedin: www.linkedin.com/in/iván-pons-martínez-617609183
 ¡Bienvenido/a a UltimateGym! 🏋️‍♂️
 
-Este es mi proyecto fullstack para aprender, practicar y enseñar cómo montar una app de gimnasio moderna, con frontend en React (Vite) y backend Node.js/Express/MongoDB. Si eres recruiter, compi dev o simplemente te gusta, aquí tienes un ejemplo realista y funcional.
+Este es mi proyecto fullstack, Una app de gimnasio moderna, con frontend en React (Vite) y backend Node.js/Express/MongoDB. Si eres recruiter, compañer@ dev o simplemente te gusta, aquí tienes un ejemplo realista y funcional.
 
 ---
 
