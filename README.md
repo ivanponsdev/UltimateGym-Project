@@ -11,8 +11,9 @@ Este es mi proyecto fullstack, Una app de gimnasio moderna, con frontend en Reac
 ## 📱 Vista previa
 
 <div align="center">
-  <img src="frontend-react/public/expositor_PC.png" alt="Vista PC" width="45%" style="margin: 10px;"/>
-  <img src="frontend-react/public/expositor_movil.png" alt="Vista Móvil" width="45%" style="margin: 10px;"/>
+  <img src="frontend-react/public/expositor_PC.png" alt="Vista PC" width="70%" style="margin: 15px;"/>
+  
+  <img src="frontend-react/public/expositor_movil.png" alt="Vista Móvil" width="30%" style="margin: 15px;"/>
 </div>
 
 ---
