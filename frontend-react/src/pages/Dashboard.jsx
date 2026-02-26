@@ -17,7 +17,7 @@ const EjerciciosSection = ({ onSelectEjercicio }) => {
   const [filtroEquipamiento, setFiltroEquipamiento] = useState('')
   const [busqueda, setBusqueda] = useState('')
 
-  const gruposMusculares = ['pecho', 'espalda', 'piernas', 'hombros', 'brazos', 'core', 'cardio']
+  const gruposMusculares = ['pecho', 'espalda', 'piernas', 'hombros', 'brazos', 'core']
 
   useEffect(() => {
     cargarEjercicios()

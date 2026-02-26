@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    await mongoose.connect('mongodb://localhost:27017/gymAppBD');
+    const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/gymAppBD';
+    await mongoose.connect(mongoURI);
     console.log(' MongoDB conectado correctamente');
   } catch (error) {
     console.error('ERROR: No se pudo conectar con MongoDB:', error.message);

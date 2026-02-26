@@ -5,7 +5,7 @@ export default function Footer() {
   
   return (
     <footer className="footer">
-      <p>&copy; {currentYear} UltimateGym. Todos los derechos reservados.</p>
+      <p>&copy; {currentYear} Iván Pons. Todos los derechos reservados.</p>
     </footer>
   )
 }

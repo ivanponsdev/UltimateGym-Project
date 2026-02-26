@@ -16,7 +16,7 @@ const Sidebar = ({ activeSection, setActiveSection, menuItems }) => {
     <aside className="sidebar" role="complementary" aria-label="Navegación principal del sitio">
       <div className="sidebar-logo-container">
         <img
-          src="/Sporty Online Gym Logo featuring 'UG' (1).png"
+          src="/logo-ug.png"
           alt="Ultimate Gym Logo"
           className="sidebar-logo-img"
         />

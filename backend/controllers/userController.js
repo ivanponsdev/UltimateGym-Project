@@ -1,10 +1,7 @@
-// backend/controllers/userController.js
-const User = require('../models/Usuario');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-
-const JWT_SECRET = process.env.JWT_SECRET || 'devsecret';
-
+// Autor: Iván Pons Martínez
+// Controlador de Usuario
+//
+// ----------------------------------------
 // POST /api/users/login -> autenticar un usuario
 const loginUser = async (req, res) => {
     try {

@@ -1,7 +1,7 @@
 {
-  "name": "gym-app-fase1-usuarios",
+  "name": "ultimategym",
   "version": "1.0.0",
-  "description": "Fase 1: Sistema de gestión de usuarios con autenticación JWT y bcrypt",
+  "description": "Aplicación web fullstack de gestión de gimnasio con React, Node.js, Express y MongoDB",
   "main": "server.js",
   "scripts": {
     "start": "node backend/server.js",
@@ -38,6 +38,6 @@
     "usuarios",
     "autenticacion"
   ],
-  "author": "Tu Nombre",
+  "author": "Iván Pons Martínez",
   "license": "MIT"
 }

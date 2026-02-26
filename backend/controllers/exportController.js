@@ -1,13 +1,6 @@
 const Usuario = require('../models/Usuario');
 const Clase = require('../models/Clase');
 
-let Stats;
-try {
-  Stats = require('../models/Stats');
-} catch (e) {
-  Stats = null;
-}
-
 exports.getExportUsers = async (req, res) => {
   try {
     const usuarios = await Usuario.find({});
@@ -27,13 +20,5 @@ exports.getExportClasses = async (req, res) => {
 };
 
 exports.getExportStats = async (req, res) => {
-  if (!Stats) {
-    return res.status(404).json({ error: 'Modelo de estadísticas no encontrado' });
-  }
-  try {
-    const stats = await Stats.find({});
-    res.json(stats);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al exportar estadísticas' });
-  }
+  return res.status(501).json({ message: 'Exportación de estadísticas no implementada aún' });
 };

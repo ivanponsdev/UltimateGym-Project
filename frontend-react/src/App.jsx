@@ -65,3 +65,10 @@ function App() {
 }
 
 export default App
+
+// Autor: Iván Pons Martínez
+// UltimateGym - Frontend principal (SPA)
+//
+// Proyecto React + Vite
+//
+// ----------------------------------------

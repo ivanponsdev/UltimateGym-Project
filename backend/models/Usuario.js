@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 
+// Autor: Iván Pons Martínez
+// Modelo de Usuario
+// ----------------------------------------
 const usuarioSchema = new mongoose.Schema({
   nombre: { type: String, required: true, trim: true },
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },

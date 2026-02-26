@@ -1,4 +1,3 @@
-
 //Importar todas las librerías necesarias
 require('dotenv').config(); // Cargar variables de entorno
 const express = require('express');
@@ -24,20 +23,15 @@ app.use((req, res, next) => {
   next();
 });
 
-// Middleware para descargas de archivos (guías, ejercicios, etc)
+// Servir archivos estáticos (imágenes de ejercicios, PDFs de guías, etc.)
+// Solo forzar descarga para guías PDF, las imágenes de ejercicios se muestran en el navegador
 app.use('/uploads', (req, res, next) => {
-  // Si la URL contiene /guias/ o /ejercicios/, forzar descarga
-  if (req.path.includes('/guias/') || req.path.includes('/ejercicios/')) {
+  if (req.path.includes('/guias/')) {
     const filename = path.basename(req.path);
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
   }
   next();
 }, express.static(path.join(__dirname, 'uploads')));
-
-// Middleware para logging de peticiones (útil para debug)
-app.use((req, res, next) => {
-  next();
-});
 
 //Importar las rutas (solo usuarios y autenticación en esta fase)
 const rutasUsuarios = require('./routes/userRoutes');
@@ -50,21 +44,13 @@ const rutasExport = require('./routes/exportRoutes');
 const rutasEmail = require('./routes/emailRoutes');
 
 //Configurar las rutas de la API
-// /api/users
 app.use('/api/users', rutasUsuarios);
-// /api/auth  
 app.use('/api/auth', rutasAutenticacion);
-// /api/clases
 app.use('/api/clases', rutasClases);
-// /api/ejercicios
 app.use('/api/ejercicios', rutasEjercicios);
-// /api/guias
 app.use('/api/guias', rutasGuias);
-// /api/stats
 app.use('/api/stats', rutasStats);
-// /api/export
 app.use('/api/export', rutasExport);
-// /api/email
 app.use('/api/email', rutasEmail);
 
 // En desarrollo, el frontend corre en Vite (puerto 3000)
@@ -111,6 +97,7 @@ servidor.on('error', (error) => {
 });
 
 // Funciones para cerrar el servidor correctamente (graceful shutdown)
+//Solucionamos problemas de reinicios o conexiones abiertas al cerrar el servidor con nodemon o Ctrl+C, que me daban errores al volver a iniciar el servidor
 const cerrarServidor = async (señal) => {
   console.log(`Recibida señal ${señal}. Cerrando servidor...`);
   servidor.close(async () => {
@@ -135,3 +122,8 @@ const cerrarServidor = async (señal) => {
 // que me daban problemas al volver a iniciar el servidor con nodemon
 process.once('SIGUSR2', () => cerrarServidor('SIGUSR2')); //nodemon reiniciar el servidor sin errores
 process.on('SIGINT', () => cerrarServidor('SIGINT')); //cerrar bien la conexión
+
+// Autor: Iván Pons Martínez
+// UltimateGym - Backend principal
+// Proyecto SPA + API RESTful
+// ----------------------------------------

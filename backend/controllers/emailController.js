@@ -67,7 +67,7 @@ exports.sendGuidesEmail = async (req, res) => {
 // Obtener estado del último envío
 exports.getLastEmailStatus = async (req, res) => {
   try {
-    const userId = req.user._id;
+    const userId = req.user.id;
     
     // Placeholder 
     res.json({ 

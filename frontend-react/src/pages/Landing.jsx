@@ -9,7 +9,7 @@ const Landing = () => {
     <>
       {/* Logo flotante en esquina - fuera del contenedor flex */}
       <div className="floating-logo-landing">
-        <img src="/Sporty Online Gym Logo featuring 'UG' (1).png" alt="Ultimate Gym Logo" />
+        <img src="/logo-ug.png" alt="Ultimate Gym Logo" />
       </div>
 
       <div id="landing-container" className="container">
