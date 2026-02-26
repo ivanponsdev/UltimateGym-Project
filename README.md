@@ -2,11 +2,6 @@
 
 **Autor:** Iván Pons Martínez
 
-[![Licencia: CC BY-NC-ND 4.0](https://img.shields.io/badge/Licencia-CC%20BY--NC--ND%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
-
-> **Licencia:**
-> Este proyecto es solo para fines educativos y de portfolio. Puedes clonar, probar y aprender, pero **no puedes venderlo ni publicarlo como proyecto propio**  Más info en el archivo LICENSE. Para cualquiera de estas acciones comerciales, puedes contactar conmigo a través de mis canales.
-
 ¡Bienvenido/a a UltimateGym! 🏋️‍♂️
 
 Este es mi proyecto fullstack para aprender, practicar y enseñar cómo montar una app de gimnasio moderna, con frontend en React (Vite) y backend Node.js/Express/MongoDB. Si eres recruiter, compi dev o simplemente te gusta, aquí tienes un ejemplo realista y funcional.
@@ -15,14 +10,17 @@ Este es mi proyecto fullstack para aprender, practicar y enseñar cómo montar u
 
 ## ¿Qué es esto?
 
-Una SPA donde puedes:
-- Registrarte y loguearte (JWT, roles user/admin)
+UltimateGym es una SPA fullstack completa donde puedes:
+- Registrarte y loguearte con autenticación JWT y roles (user/admin)
 - Ver y apuntarte a clases de gimnasio
-- Consultar y filtrar ejercicios (con imágenes)
-- Descargar guías en PDF
-- Panel de admin para gestionar usuarios, clases, ejercicios y guías
-- Estadísticas y exportación de datos
-- Accesibilidad real (widgets, skiplinks, contraste, etc)
+- Consultar y filtrar ejercicios por grupo muscular y equipamiento (con imágenes)
+- Descargar guías en PDF personalizadas
+- Panel de admin completo para gestionar usuarios, clases, ejercicios y guías
+- Estadísticas detalladas (usuarios por objetivo, clases populares, inscripciones, análisis por día)
+- Exportación de datos de usuarios y clases (preparado para automatizar a Excel con n8n)
+- **Envío automático de guías por email** a través de n8n
+- Chat en vivo con Landbot
+- Accesibilidad real (widgets, skiplinks, contraste, etc.)
 
 Todo con seeds de ejemplo para que lo veas funcionando nada más clonar.
 
@@ -42,25 +40,49 @@ Todo con seeds de ejemplo para que lo veas funcionando nada más clonar.
 1. Clona el repo y entra en la carpeta
 2. Copia `.env.example` a `.env` y pon tus datos (o deja los de local para probar)
 3. Instala dependencias:
-   npm install
+   - npm install
 
 4. Ejecuta los seeds para tener datos de ejemplo:
-   node backend/seeds/index.js
-  
+   
+   - node backend/seeds/index.js
 5. Arranca todo (backend y frontend a la vez):
+   ```
    npm run dev:all
+   ```
+6. Abre [http://localhost:3000](http://localhost:3000) y explora la app
 
-6. Abre [http://localhost:3000](http://localhost:3000) y juega
+
+---
+
+## Configuración opcional
+
+Estas características están implementadas en el proyecto y funcionan si las configuras:
+
+- **n8n (automatizaciones):** Conecta tu instancia de n8n para activar automáticamente:
+  - Envío de emails con guías personalizadas a usuarios
+  - Exportación automática de datos a hojas Excel
+  - Otros flujos de automatización que diseñes
+  
+  Configura `N8N_WEBHOOK_URL` en tu `.env` con tu webhook de n8n. Sin esta configuración, el proyecto funciona normalmente pero sin las automatizaciones.
+
+- **Landbot (chat en vivo):** Añade un chat de atención al cliente. Sin configurarlo, la app funciona normalmente.
+
+---
 
 ## Cosas interesantes del código
 
-- Estructura clara: MVC en backend, componentes y contextos en frontend
+- Estructura clara: **MVC en backend**, componentes y contextos en frontend
 - Seeds con imágenes de ejemplo (¡no más apps vacías al clonar!)
-- Accesibilidad de verdad, no solo por cumplir
+- **Autenticación JWT con roles** (user/admin) y validaciones completas
+- **Sistema de automatizaciones** integrado con n8n para envíos de emails y exportaciones
+- **Estadísticas avanzadas** con agregaciones MongoDB en tiempo real
+- **Filtros y búsquedas bidireccionales** (frontend y backend)
+- **Panel admin real** con gestión completa de usuarios, clases, ejercicios y guías
+- **Gráficas interactivas** con Recharts (lineal, circular, de barras)
+- **Gestión de archivos** (PDF y imágenes) con multer y almacenamiento en servidor
+- **Accesibilidad de verdad**, no solo por cumplir (WCAG compliance)
 - Código comentado y limpio, sin relleno ni funciones muertas
 - Variables de entorno bien documentadas
-- Filtros y búsquedas en frontend y backend
-- Panel admin real, no solo "para la demo"
 
 ---
 
@@ -70,6 +92,4 @@ Porque quiero que quien lo vea pueda probarlo sin pelearse con dependencias, see
 
 ---
 
-## Licencia
 
-MIT. Haz lo que quieras, pero si te mola, ¡dímelo por LinkedIn! 😉
