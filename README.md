@@ -36,6 +36,44 @@ Todo con seeds de ejemplo para que lo veas funcionando nada más clonar.
 
 ---
 
+## 🎮 Experiencia Visual & Diseño
+
+UltimateGym no es solo funcionalidad, es **una experiencia de usuario completa** diseñada para **motivar y enganchar**:
+
+### ✨ Diseño Cyberpunk Moderno
+- **Colores Neón:** Morado y azul fluorescente sobre fondos oscuros para crear contraste visual hipnotizante
+- **Animaciones Suaves:** Efectos fadeIn, scale, glow y gradientes que fluyen constantemente
+- **Shadowbox Radiante:** Cada elemento brilla con efectos de luz neón que responden al hover
+- **Interfaz Responsiva:** Adaptada perfectly a PC, tablet y móvil sin perder la calidad visual
+
+### 💪 Gamificación & Motivación
+La app está diseñada para que el usuario **quiera volver**:
+- **Dashboard inspirador:** Estadísticas visuales con gráficas dinámicas que muestran tu progreso
+- **Interfaz intuitiva:** Flujos claros y rápidos para apuntarse a clases
+- **Feedback visual:** Cada acción tiene una respuesta inmediata (animaciones, notificaciones)
+- **Accesibilidad total:** Widgets de accesibilidad, contraste mejorado, navegación por teclado - porque entrenar incluye a todos
+
+### 🎯 Propósito
+UltimateGym existe para una sola cosa: **Hacerte querer entrenar 💪**
+
+---
+
+♿ Accesibilidad: Pensando en Todos
+
+UltimateGym incluye características de accesibilidad reales:
+
+- **Widget de Accesibilidad:** Botón en esquina inferior derecha para activar modo accesible con alto contraste
+- **Skip Link:** Salta directamente al contenido principal (visible cuando el modo accesible está activado)
+- **Etiquetas ARIA:** Labels descriptivos en navegación, botones y componentes clave
+- **Alto Contraste:** Estilos específicos blanco sobre fondos oscuros para máxima legibilidad
+- **Focus Visible:** Todos los elementos interactivos tienen foco visible en navegación por teclado
+- **Respeta Preferencias del Sistema:** Detecta `prefers-color-scheme` del navegador
+- **Responsive:** Funciona perfectamente en todos los tamaños de pantalla
+
+Queremos que entrenar sea accesible para todos. 💪
+
+---
+
 ## Tecnologías y stack
 
 - **Frontend:** React 19, Vite, CSS Modules, Recharts
@@ -111,6 +149,4 @@ Estas características están implementadas en el proyecto y funcionan si las co
 ---
 
 
-
-
-Cualquier cosa, puedes escribirme al Linkedin 😉
+Cualquier cosa que necesites, sugerencias o demás, no dudes en contactarme por Linkedin 😉
