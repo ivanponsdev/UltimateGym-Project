@@ -58,7 +58,7 @@ UltimateGym existe para una sola cosa: **Hacerte querer entrenar 💪**
 
 ---
 
-♿ Accesibilidad: Pensando en Todos
+👀 Accesibilidad: Pensando en Todos
 
 UltimateGym incluye características de accesibilidad reales:
 
