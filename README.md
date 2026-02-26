@@ -1,10 +1,10 @@
 # UltimateGym
 
-**Autor:** Iván Pons Martínez
+**Autor:** Iván Pons Martínez Link de linkedin: www.linkedin.com/in/iván-pons-martínez-617609183
 
 ¡Bienvenido/a a UltimateGym! 🏋️‍♂️
 
-Este es mi proyecto fullstack para aprender, practicar y enseñar cómo montar una app de gimnasio moderna, con frontend en React (Vite) y backend Node.js/Express/MongoDB. Si eres recruiter, compi dev o simplemente te gusta, aquí tienes un ejemplo realista y funcional.
+Este es mi proyecto fullstack, Una app de gimnasio moderna, con frontend en React (Vite) y backend Node.js/Express/MongoDB. Si eres recruiter, compañer@ dev o simplemente te gusta, aquí tienes un ejemplo realista y funcional.
 
 ---
 
@@ -64,8 +64,22 @@ Estas características están implementadas en el proyecto y funcionan si las co
   - Otros flujos de automatización que diseñes
   
   Configura `N8N_WEBHOOK_URL` en tu `.env` con tu webhook de n8n. Sin esta configuración, el proyecto funciona normalmente pero sin las automatizaciones.
+  
+  **Ejemplos de flujos de n8n implementados:**
+  
+  *Automatización de envío de guías por email:*
+  ![Flujo n8n Gmail](frontend-react/public/n8n%20Gmail.png)
+  
+  *Exportación automática de datos a Excel:*
+  ![Flujo n8n Excel](frontend-react/public/n8n_excel.png)
+  
+  *Se conoce que lo que se ha realizado con n8n se podría hacer de otras formas en código directamente pero se quería probar n8n en este proyecto para aprender formas diferentes de hacerlo*
 
-- **Landbot (chat en vivo):** Añade un chat de atención al cliente. Sin configurarlo, la app funciona normalmente.
+  **Si quieres probar a hacerlo en código puedes utilizar las librerías nodemailer, exceljs etc.**
+
+
+
+- **Landbot (chat en vivo):** El ChatBot funcionará correctamente porque está el link del landbot siempre en escucha. Si quieres insertar otro modifica el enlace del LandBot.
 
 ---
 
@@ -86,10 +100,7 @@ Estas características están implementadas en el proyecto y funcionan si las co
 
 ---
 
-## ¿Por qué lo subo así?
-
-Porque quiero que quien lo vea pueda probarlo sin pelearse con dependencias, seeds, ni configuraciones raras. Y porque si buscas a alguien que sepa montar proyectos reales, aquí tienes un ejemplo de cómo lo haría yo.
-
----
 
 
+
+Cualquier cosa, puedes escribirme al Linkedin 😉
