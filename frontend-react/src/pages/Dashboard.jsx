@@ -282,6 +282,20 @@ const GuiasSection = () => {
         }
       </p>
 
+      {!isAdmin && (
+        <div
+          className="card"
+          style={{
+            marginBottom: '1rem',
+            border: '1px solid var(--secondary-color)',
+            minHeight: 'auto',
+            display: 'block'
+          }}
+        >
+          <strong>Nota:</strong> Estás usando la cuenta demo, por lo que la funcionalidad de enviar guías a tu email personal está deshabilitada.
+        </div>
+      )}
+
 
 
       {guias.length === 0 ? (
@@ -298,7 +312,8 @@ const GuiasSection = () => {
               descargarGuia={descargarGuia}
               formatearObjetivo={formatearObjetivo}
               obtenerColorObjetivo={obtenerColorObjetivo}
-              enviarGuiaEmail={!isAdmin ? enviarGuiasEmail : null}
+              enviarGuiaEmail={null}
+              emailDisabledReason={!isAdmin ? 'Por motivos de recursos, el envío por Gmail está desactivado.' : null}
             />
           ))}
         </div>
@@ -309,7 +324,7 @@ const GuiasSection = () => {
 
 const Dashboard = () => {
   const navigate = useNavigate()
-  const { user, updateUser, logout } = useAuth()
+  const { user, updateUser, logout, isDemo } = useAuth()
   const [activeSection, setActiveSection] = useState('profile')
   const [isEditingProfile, setIsEditingProfile] = useState(false)
   const [isFirstAccess, setIsFirstAccess] = useState(false) // Primera vez después del registro
@@ -450,6 +465,17 @@ const Dashboard = () => {
   }
 
   const handleEditProfile = () => {
+    if (isDemo) {
+      setModalConfig({
+        isOpen: true,
+        type: 'alert',
+        message: 'Modo demo en solo lectura: no puedes editar el perfil.',
+        iconType: 'warning',
+        onConfirm: null
+      })
+      return
+    }
+
     setIsEditingProfile(true)
     // Resetear errores de validación
     setValidationErrors({ 
@@ -629,6 +655,17 @@ const Dashboard = () => {
   }
 
   const handleSaveProfile = async () => {
+    if (isDemo) {
+      setModalConfig({
+        isOpen: true,
+        type: 'alert',
+        message: 'Modo demo en solo lectura: no puedes guardar cambios de perfil.',
+        iconType: 'warning',
+        onConfirm: null
+      })
+      return
+    }
+
     // Validar campos obligatorios
     const errors = { ...validationErrors }
     
@@ -824,6 +861,19 @@ const Dashboard = () => {
       <main className="content">
         {activeSection === 'profile' && (
           <section id="profile" className="content-section active">
+            {isDemo && (
+              <div
+                className="card"
+                style={{
+                  marginBottom: '1rem',
+                  border: '1px solid var(--secondary-color)',
+                  minHeight: 'auto',
+                  display: 'block'
+                }}
+              >
+                <strong>Modo demo:</strong> puedes probar clases con normalidad, pero no modificar los datos de la cuenta.
+              </div>
+            )}
             <h2>Tu Perfil</h2>
             <div className="card">
               {!isEditingProfile ? (

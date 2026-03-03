@@ -15,6 +15,19 @@ const usuariosSeed = [
     createdAt: new Date('2025-01-15')
   },
   {
+    nombre: "Usuario Demo",
+    email: "demo@portfolio.com",
+    password: "Demo123!",
+    edad: 26,
+    sexo: "otro",
+    objetivo: "recomposicion_corporal",
+    role: "user",
+    isDemo: true,
+    primerAcceso: false,
+    requiereActualizacionContraseña: false,
+    createdAt: new Date('2026-01-20')
+  },
+  {
     nombre: "Manolito Gafotas",
     email: "manolitogafotas@ddddd.com",
     password: "123456",

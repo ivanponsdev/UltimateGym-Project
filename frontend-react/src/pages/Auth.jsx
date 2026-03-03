@@ -114,6 +114,20 @@ const Auth = () => {
     }
   }
 
+  const handleDemoLogin = async () => {
+    try {
+      const data = await authAPI.loginDemo()
+      login(data.usuario, data.token)
+      showNotification('Has entrado en modo demo. Puedes probar clases; cuenta protegida.', 'success')
+
+      setTimeout(() => {
+        navigate('/dashboard')
+      }, 1000)
+    } catch (error) {
+      showNotification(error.message || 'Error al iniciar modo demo', 'error')
+    }
+  }
+
   const handleRegister = async (e) => {
     e.preventDefault()
     
@@ -191,6 +205,17 @@ const Auth = () => {
                 />
               </div>
               <button type="submit" className="btn-neon">Entrar</button>
+              <button
+                type="button"
+                className="btn-neon"
+                style={{ marginTop: '0.75rem', background: 'transparent' }}
+                onClick={handleDemoLogin}
+              >
+                Entrar en modo demo
+              </button>
+              <p style={{ fontSize: '0.9rem', marginTop: '0.5rem', color: 'var(--text-color-dark)' }}>
+                Puedes probar la app completa; los datos de cuenta están protegidos.
+              </p>
               <p className="form-switch">
                 ¿No tienes cuenta?{' '}
                 <a href="#" onClick={(e) => { e.preventDefault(); setShowLogin(false); }}>

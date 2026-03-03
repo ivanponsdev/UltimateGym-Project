@@ -24,7 +24,7 @@ export const EjercicioCard = ({ ejercicio, onClickEjercicio }) => {
   )
 }
 
-export const GuiaCard = ({ guia, descargarGuia, formatearObjetivo, obtenerColorObjetivo, enviarGuiaEmail }) => {
+export const GuiaCard = ({ guia, descargarGuia, formatearObjetivo, obtenerColorObjetivo, enviarGuiaEmail, emailDisabledReason = null }) => {
   return (
     <div className="card guia-card">
       <div className="guia-header">
@@ -47,11 +47,13 @@ export const GuiaCard = ({ guia, descargarGuia, formatearObjetivo, obtenerColorO
         >
           📥 Descargar PDF
         </button>
-        {enviarGuiaEmail && (
+        {(enviarGuiaEmail || emailDisabledReason) && (
           <button 
             className="btn-neon btn-email"
-            onClick={() => enviarGuiaEmail(guia._id)}
-            title="Enviar guía por email"
+            onClick={() => enviarGuiaEmail && enviarGuiaEmail(guia._id)}
+            title={emailDisabledReason || 'Enviar guía por email'}
+            disabled={!!emailDisabledReason}
+            style={emailDisabledReason ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
           >
             ✉️ Enviar por Email
           </button>

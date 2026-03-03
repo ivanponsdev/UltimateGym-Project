@@ -34,4 +34,15 @@ function requireAdmin(req, res, next) {
   return next();
 }
 
-module.exports = { authenticateJWT, requireAdmin };
+// Middleware: bloquear escritura para cuenta demo
+function requireNotDemo(req, res, next) {
+  if (!req.user) return res.status(401).json({ message: 'No autenticado' });
+  if (req.user.isDemo) {
+    return res.status(403).json({
+      message: 'Modo demo en solo lectura: esta acción no está permitida.'
+    });
+  }
+  return next();
+}
+
+module.exports = { authenticateJWT, requireAdmin, requireNotDemo };

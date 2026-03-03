@@ -99,6 +99,17 @@ Queremos que entrenar sea accesible para todos. 💪
    ```
 6. Abre [http://localhost:3000](http://localhost:3000) y explora la app
 
+### 🔒 Modo Demo (ideal para portfolio)
+
+- En la pantalla de login pulsa **"Entrar en modo demo"**.
+- O inicia sesión manualmente con estas credenciales (para mostrarlas en tu portfolio):
+   - **Email:** demo@portfolio.com
+   - **Password:** Demo123!
+- El backend crea una sesión con la cuenta demo y marca el token como `isDemo`.
+- La cuenta demo bloquea **solo cambios de cuenta**: no puede editar perfil ni eliminar la cuenta.
+- Sí permite probar el flujo principal de uso (inscribirse/desinscribirse en clases).
+- Si la cuenta demo no existe, el backend la crea automáticamente al arrancar (con `DEMO_USER_EMAIL`, `DEMO_USER_PASSWORD` y `DEMO_USER_NAME`).
+
 
 ---
 

@@ -4,10 +4,11 @@ const express = require('express');
 const path = require('path');
 const connectDB = require("./config/db"); // Conexión a MongoDB
 const mongoose = require('mongoose');
+const ensureDemoUser = require('./services/demoUserService');
 
 // Crear la aplicación Express y conectar a la base de datos MongoDB
 const app = express();
-connectDB();
+let servidor;
 
 //Middleware para procesar datos JSON en las peticiones
 app.use(express.json());
@@ -79,27 +80,37 @@ if (process.env.NODE_ENV === 'production') {
 const PORT = process.env.PORT || 5001;
 
 // Arrancar el servidor y manejar posibles errores
-const servidor = app.listen(PORT, () => {
-  console.log(` Servidor Fase 1 iniciado en http://localhost:${PORT}`);
-});
+const iniciarServidor = async () => {
+  await connectDB();
+  await ensureDemoUser();
 
-// Manejar error si el PORT ya está ocupado
-servidor.on('error', (error) => {
-  if (error && error.code === 'EADDRINUSE') {
-    console.error(` El PORT ${PORT} ya está en uso.`);
-    console.error(` Puedes cambiar el PORT o cerrar el proceso que lo usa`);
-    // Esto lo añado porque es un problema que me pasaba a mí y lo tenía que utilizar
-    // Para conocer más rápido el error 
-    console.error(` Buscar proceso: netstat -ano | findstr :${PORT}`);   
-    process.exit(1);
-  }
-  throw error;
-});
+  servidor = app.listen(PORT, () => {
+    console.log(` Servidor Fase 1 iniciado en http://localhost:${PORT}`);
+  });
+
+  // Manejar error si el PORT ya está ocupado
+  servidor.on('error', (error) => {
+    if (error && error.code === 'EADDRINUSE') {
+      console.error(` El PORT ${PORT} ya está en uso.`);
+      console.error(` Puedes cambiar el PORT o cerrar el proceso que lo usa`);
+      // Esto lo añado porque es un problema que me pasaba a mí y lo tenía que utilizar
+      // Para conocer más rápido el error 
+      console.error(` Buscar proceso: netstat -ano | findstr :${PORT}`);   
+      process.exit(1);
+    }
+    throw error;
+  });
+};
+
+iniciarServidor();
 
 // Funciones para cerrar el servidor correctamente (graceful shutdown)
 //Solucionamos problemas de reinicios o conexiones abiertas al cerrar el servidor con nodemon o Ctrl+C, que me daban errores al volver a iniciar el servidor
 const cerrarServidor = async (señal) => {
   console.log(`Recibida señal ${señal}. Cerrando servidor...`);
+  if (!servidor) {
+    process.exit(0);
+  }
   servidor.close(async () => {
     console.log(' Servidor cerrado correctamente.');
     try {

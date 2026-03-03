@@ -2,6 +2,20 @@
 // Controlador de Usuario
 //
 // ----------------------------------------
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const User = require('../models/Usuario');
+const JWT_SECRET = process.env.JWT_SECRET || 'devsecret';
+const DEMO_USER_EMAIL = (process.env.DEMO_USER_EMAIL || 'demo@portfolio.com').toLowerCase();
+
+const isDemoAccount = (user) => {
+    if (!user) return false;
+    return Boolean(
+        user.isDemo ||
+        (user.email && user.email.toLowerCase() === DEMO_USER_EMAIL)
+    );
+};
+
 // POST /api/users/login -> autenticar un usuario
 const loginUser = async (req, res) => {
     try {
@@ -21,7 +35,7 @@ const loginUser = async (req, res) => {
         }
 
         // Firmar un token y devolverlo junto al usuario (sin contraseña)
-        const payload = { id: user._id, role: user.role, objetivo: user.objetivo };
+        const payload = { id: user._id, role: user.role, objetivo: user.objetivo, isDemo: isDemoAccount(user) };
         const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
         res.json({
             token,
@@ -33,6 +47,7 @@ const loginUser = async (req, res) => {
                 objetivo: user.objetivo,
                 objetivoClasesSemana: user.objetivoClasesSemana,
                 role: user.role,
+                isDemo: isDemoAccount(user),
                 primerAcceso: user.primerAcceso || false,
                 requiereActualizacionContraseña: user.requiereActualizacionContraseña || false,
                 createdAt: user.createdAt
@@ -50,7 +65,8 @@ const getUsers = async (req, res) => {
     const users = await User.find().select('-password');
     // Asegurar que los campos booleanos tengan valores por defecto
     const usuariosConDefaults = users.map(u => ({
-      ...u.toObject(),
+            ...u.toObject(),
+            isDemo: isDemoAccount(u),
       primerAcceso: u.primerAcceso || false,
       requiereActualizacionContraseña: u.requiereActualizacionContraseña || false
     }));
@@ -110,7 +126,7 @@ const createUser = async (req, res) => {
     const savedUser = await newUser.save();
     
     // Generar token JWT para auto-login después del registro
-    const payload = { id: savedUser._id, role: savedUser.role, objetivo: savedUser.objetivo };
+    const payload = { id: savedUser._id, role: savedUser.role, objetivo: savedUser.objetivo, isDemo: false };
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
     
     res.status(201).json({ 
@@ -124,6 +140,7 @@ const createUser = async (req, res) => {
             objetivo: savedUser.objetivo,
             objetivoClasesSemana: savedUser.objetivoClasesSemana,
             role: savedUser.role,
+            isDemo: false,
             primerAcceso: savedUser.primerAcceso || false,
             requiereActualizacionContraseña: savedUser.requiereActualizacionContraseña || false,
             createdAt: savedUser.createdAt
@@ -212,6 +229,7 @@ const updateUser = async (req, res) => {
                 sexo: updatedUser.sexo,
                 objetivo: updatedUser.objetivo,
                 role: updatedUser.role,
+                isDemo: isDemoAccount(updatedUser),
                 primerAcceso: updatedUser.primerAcceso || false,
                 requiereActualizacionContraseña: updatedUser.requiereActualizacionContraseña || false,
                 createdAt: updatedUser.createdAt
@@ -326,6 +344,7 @@ const getProfile = async (req, res) => {
                 objetivo: user.objetivo,
                 objetivoClasesSemana: user.objetivoClasesSemana,
                 role: user.role,
+                isDemo: isDemoAccount(user),
                 createdAt: user.createdAt
             }
         });
@@ -413,7 +432,7 @@ const updateProfile = async (req, res) => {
         const updatedUser = await user.save();
         
         // Generar nuevo token con los datos actualizados (especialmente objetivo)
-        const newPayload = { id: updatedUser._id, role: updatedUser.role, objetivo: updatedUser.objetivo };
+        const newPayload = { id: updatedUser._id, role: updatedUser.role, objetivo: updatedUser.objetivo, isDemo: isDemoAccount(updatedUser) };
         const newToken = jwt.sign(newPayload, JWT_SECRET, { expiresIn: '7d' });
         
         res.json({
@@ -426,6 +445,7 @@ const updateProfile = async (req, res) => {
                 objetivo: updatedUser.objetivo,
                 objetivoClasesSemana: updatedUser.objetivoClasesSemana,
                 role: updatedUser.role,
+                isDemo: isDemoAccount(updatedUser),
                 primerAcceso: updatedUser.primerAcceso || false,
                 requiereActualizacionContraseña: updatedUser.requiereActualizacionContraseña || false,
                 createdAt: updatedUser.createdAt
@@ -453,4 +473,50 @@ const updateProfile = async (req, res) => {
     }
 };
 
-module.exports = { loginUser, getUsers, createUser, updateUser, deleteUser, deleteMyAccount, getProfile, updateProfile };
+// POST /api/auth/demo-login -> iniciar sesión como usuario demo
+const loginDemoUser = async (req, res) => {
+    try {
+        const demoUser = await User.findOne({
+            $or: [
+                { isDemo: true },
+                { email: DEMO_USER_EMAIL }
+            ]
+        });
+
+        if (!demoUser) {
+            return res.status(404).json({
+                message: 'Cuenta demo no configurada. Crea un usuario demo en la base de datos.'
+            });
+        }
+
+        const payload = {
+            id: demoUser._id,
+            role: demoUser.role,
+            objetivo: demoUser.objetivo,
+            isDemo: true
+        };
+
+        const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+
+        res.json({
+            token,
+            usuario: {
+                nombre: demoUser.nombre,
+                email: demoUser.email,
+                edad: demoUser.edad,
+                sexo: demoUser.sexo,
+                objetivo: demoUser.objetivo,
+                objetivoClasesSemana: demoUser.objetivoClasesSemana,
+                role: demoUser.role,
+                isDemo: true,
+                primerAcceso: false,
+                requiereActualizacionContraseña: false,
+                createdAt: demoUser.createdAt
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Error en el servidor al iniciar sesión demo', error: error.message });
+    }
+};
+
+module.exports = { loginUser, loginDemoUser, getUsers, createUser, updateUser, deleteUser, deleteMyAccount, getProfile, updateProfile };
