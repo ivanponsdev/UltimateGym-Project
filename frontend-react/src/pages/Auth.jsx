@@ -216,6 +216,9 @@ const Auth = () => {
               <p style={{ fontSize: '0.9rem', marginTop: '0.5rem', color: 'var(--text-color-dark)' }}>
                 Puedes probar la app completa; los datos de cuenta están protegidos.
               </p>
+              <p style={{ fontSize: '0.85rem', marginTop: '1rem', color: '#FF8800', fontWeight: '600' }}>
+                Alojado en servidor gratuito, puede tardar el primer inicio si no se ha hecho ninguna petición últimamente
+              </p>
               <p className="form-switch">
                 ¿No tienes cuenta?{' '}
                 <a href="#" onClick={(e) => { e.preventDefault(); setShowLogin(false); }}>
