@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { Analytics } from '@vercel/analytics/react'
 import { AuthProvider } from './context/AuthContext'
 import { AccessibilityProvider } from './context/AccessibilityContext'
 import Landing from './pages/Landing'
@@ -58,6 +59,7 @@ function App() {
           </div>
           <Footer />
           <AccesibilidadWidget />
+          <Analytics />
         </Router>
       </AuthProvider>
     </AccessibilityProvider>
