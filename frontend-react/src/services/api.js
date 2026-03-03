@@ -47,6 +47,14 @@ export const authAPI = {
     return handleResponse(response)
   },
 
+  loginDemoAdmin: async () => {
+    const response = await fetch(`${API_URL}/auth/demo-admin-login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    })
+    return handleResponse(response)
+  },
+
   register: async (nombre, email, password) => {
     const response = await fetch(`${API_URL}/auth/register`, {
       method: 'POST',

@@ -529,4 +529,51 @@ const loginDemoUser = async (req, res) => {
     }
 };
 
-module.exports = { loginUser, loginDemoUser, getUsers, createUser, updateUser, deleteUser, deleteMyAccount, getProfile, updateProfile };
+const loginDemoAdminUser = async (req, res) => {
+    try {
+        const demoAdmin = await User.findOne({
+            $or: [
+                { isDemoAdmin: true },
+                { email: DEMO_ADMIN_EMAIL }
+            ]
+        });
+
+        if (!demoAdmin) {
+            return res.status(404).json({
+                message: 'Cuenta admin demo no configurada.'
+            });
+        }
+
+        const payload = {
+            id: demoAdmin._id,
+            role: demoAdmin.role,
+            objetivo: demoAdmin.objetivo,
+            isDemo: false,
+            isDemoAdmin: true
+        };
+
+        const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+
+        res.json({
+            token,
+            usuario: {
+                nombre: demoAdmin.nombre,
+                email: demoAdmin.email,
+                edad: demoAdmin.edad,
+                sexo: demoAdmin.sexo,
+                objetivo: demoAdmin.objetivo,
+                objetivoClasesSemana: demoAdmin.objetivoClasesSemana,
+                role: demoAdmin.role,
+                isDemo: false,
+                isDemoAdmin: true,
+                primerAcceso: false,
+                requiereActualizacionContraña: false,
+                createdAt: demoAdmin.createdAt
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Error en el servidor al iniciar sesión admin demo', error: error.message });
+    }
+};
+
+module.exports = { loginUser, loginDemoUser, loginDemoAdminUser, getUsers, createUser, updateUser, deleteUser, deleteMyAccount, getProfile, updateProfile };

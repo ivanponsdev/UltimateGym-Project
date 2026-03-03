@@ -128,6 +128,20 @@ const Auth = () => {
     }
   }
 
+  const handleDemoAdminLogin = async () => {
+    try {
+      const data = await authAPI.loginDemoAdmin()
+      login(data.usuario, data.token)
+      showNotification('Has entrado como admin demo (solo lectura). Explora el panel de administración.', 'success')
+
+      setTimeout(() => {
+        navigate('/admin')
+      }, 1000)
+    } catch (error) {
+      showNotification(error.message || 'Error al iniciar modo admin demo', 'error')
+    }
+  }
+
   const handleRegister = async (e) => {
     e.preventDefault()
     
@@ -205,16 +219,26 @@ const Auth = () => {
                 />
               </div>
               <button type="submit" className="btn-neon">Entrar</button>
-              <button
-                type="button"
-                className="btn-neon"
-                style={{ marginTop: '0.75rem', background: 'transparent' }}
-                onClick={handleDemoLogin}
-              >
-                Entrar en modo demo
-              </button>
+              <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem' }}>
+                <button
+                  type="button"
+                  className="btn-neon"
+                  style={{ flex: 1, background: 'transparent', fontSize: '0.85rem' }}
+                  onClick={handleDemoLogin}
+                >
+                  👤 Demo Usuario
+                </button>
+                <button
+                  type="button"
+                  className="btn-neon"
+                  style={{ flex: 1, background: 'transparent', fontSize: '0.85rem', borderColor: '#ff6b35', color: '#ff6b35' }}
+                  onClick={handleDemoAdminLogin}
+                >
+                  🛡️ Demo Admin
+                </button>
+              </div>
               <p style={{ fontSize: '0.9rem', marginTop: '0.5rem', color: 'var(--text-color-dark)' }}>
-                Puedes probar la app completa; los datos de cuenta están protegidos.
+                Usuario demo: app completa, cuenta protegida. Admin demo: panel admin en solo lectura.
               </p>
               <p style={{ fontSize: '0.85rem', marginTop: '1rem', color: '#FF8800', fontWeight: '600' }}>
                 Alojado en servidor gratuito, puede tardar el primer inicio si no se ha hecho ninguna petición últimamente
