@@ -1,4 +1,4 @@
-const API_URL = '/api'
+const API_URL = 'https://ultimategym-project-portfolio.onrender.com/api'
 
 // Función auxiliar para manejar respuestas
 const handleResponse = async (response) => {
