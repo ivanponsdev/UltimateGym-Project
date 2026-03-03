@@ -45,4 +45,19 @@ function requireNotDemo(req, res, next) {
   return next();
 }
 
-module.exports = { authenticateJWT, requireAdmin, requireNotDemo };
+// Middleware: bloquear escritura para cuenta demo admin
+function requireNotDemoAdmin(req, res, next) {
+  if (!req.user) return res.status(401).json({ message: 'No autenticado' });
+  
+  // Bloquear si es admin demo y no es una petición GET
+  if (req.user.isDemoAdmin && req.method !== 'GET') {
+    return res.status(403).json({
+      message: 'Modo demo (admin) en solo lectura: esta acción no está permitida.'
+    });
+  }
+  
+  return next();
+}
+
+
+module.exports = { authenticateJWT, requireAdmin, requireNotDemo, requireNotDemoAdmin };

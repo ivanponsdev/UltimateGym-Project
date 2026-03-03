@@ -1,14 +1,82 @@
 # UltimateGym
 
-**Autor:** Iván Pons Martínez Link de linkedin: www.linkedin.com/in/iván-pons-martínez-617609183
+**Autor:** Iván Pons Martínez | [LinkedIn](https://www.linkedin.com/in/iván-pons-martínez-617609183)
 
-¡Bienvenido/a a UltimateGym! 🏋️‍♂️
-
-Este es mi proyecto fullstack, Una app de gimnasio moderna, con frontend en React (Vite) y backend Node.js/Express/MongoDB. Si eres recruiter, compañer@ dev o simplemente te gusta, aquí tienes un ejemplo realista y funcional.
+> Una app de gimnasio fullstack moderna. Ejemplo realista y funcional con autenticación, estadísticas, gestión completa y automatizaciones. 💪
 
 ---
 
-## 📱 Vista previa
+## 🚀 Demo en Vivo
+
+**[👉 Prueba la demo aquí](https://ultimate-gym-project.vercel.app)** ✨
+
+### Acceso Demo
+
+**Cuenta Usuario Demo:**
+```
+Email: demo@portfolio.com
+Password: Demo123!
+```
+
+**Cuenta Admin Demo (Solo Lectura):**
+```
+Email: admin@portfolio.com
+Password: Admin123!
+```
+
+⚠️ **Nota importante:** Las cuentas demo tienen **funcionalidades limitadas** para proteger los datos.
+- La cuenta usuario no puede editar perfil ni eliminar la cuenta.
+- La cuenta admin puede ver **todo el panel de administración** pero no modificar datos (solo lectura).
+
+Para **acceso completo** sin restricciones, sigue las instrucciones de setup local más abajo 👇
+
+---
+
+## 🛠️ Stack Tecnológico
+
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)
+![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite)
+![Node.js](https://img.shields.io/badge/Node.js-20-339933?logo=node.js)
+![Express](https://img.shields.io/badge/Express-4-000000?logo=express)
+![MongoDB](https://img.shields.io/badge/MongoDB-7-13AA52?logo=mongodb)
+![JWT](https://img.shields.io/badge/JWT-Auth-000000?logo=json-web-tokens)
+![Deployed](https://img.shields.io/badge/Deployed-Vercel%20%2B%20Render-blue)
+
+---
+
+## ✨ Features Principales
+
+- ✅ **Autenticación JWT** con roles (user/admin) y bcryptjs
+- ✅ **Registro y login** con validaciones completas
+- ✅ **Modo demo** para portfolio (acceso limitado)
+- ✅ **Clases de gimnasio** - Ver, filtrar, inscribirse/desinscribirse
+- ✅ **Biblioteca de ejercicios** - Por grupo muscular, equipamiento, con imágenes
+- ✅ **Guías en PDF personalizadas** - Descargables según objetivo
+- ✅ **Panel Admin completo:**
+  - Gestión de usuarios (CRUD, roles)
+  - Gestión de clases (horarios, cupos)
+  - Gestión de ejercicios (categorías, imágenes)
+  - Gestión de guías (PDF)
+- ✅ **Estadísticas avanzadas** - Gráficas en tiempo real (Recharts)
+  - Usuarios por objetivo
+  - Clases más populares
+  - Inscripciones por día
+  - Horas con más demanda
+- ✅ **Exportación de datos** - Preparado para Excel con n8n
+- ✅ **Envío automático de guías por email** vía n8n
+- ✅ **Accesibilidad real:**
+  - Widget de accesibilidad (contraste, tamaño)
+  - Skip links
+  - ARIA labels
+  - Navegación por teclado
+  - Respeta `prefers-color-scheme`
+- ✅ **Diseño Cyberpunk moderno** - Neón, animaciones, responsive
+- ✅ **Seeds de ejemplo** - Datos precargados al iniciar
+- ✅ **Deployed y vivo** - Vercel (frontend) + Render (backend)
+
+---
+
+## 📱 Capturas & Diseño
 
 <div align="center">
   <img src="frontend-react/public/expositor_PC.png" alt="Vista PC" width="70%" style="margin: 15px;"/>
@@ -16,148 +84,208 @@ Este es mi proyecto fullstack, Una app de gimnasio moderna, con frontend en Reac
   <img src="frontend-react/public/expositor_movil.png" alt="Vista Móvil" width="30%" style="margin: 15px;"/>
 </div>
 
----
-
-## ¿Qué es esto?
-
-UltimateGym es una SPA fullstack completa donde puedes:
-- Registrarte y loguearte con autenticación JWT y roles (user/admin)
-- Ver y apuntarte a clases de gimnasio
-- Consultar y filtrar ejercicios por grupo muscular y equipamiento (con imágenes)
-- Descargar guías en PDF personalizadas
-- Panel de admin completo para gestionar usuarios, clases, ejercicios y guías
-- Estadísticas detalladas (usuarios por objetivo, clases populares, inscripciones, análisis por día)
-- Exportación de datos de usuarios y clases (preparado para automatizar a Excel con n8n)
-- **Envío automático de guías por email** a través de n8n
-
-- Accesibilidad real (widgets, skiplinks, contraste, etc.)
-
-Todo con seeds de ejemplo para que lo veas funcionando nada más clonar.
+**Diseño Cyberpunk:** Colores neón, animaciones fluidas, interfaz modernista y totalmente responsive.
 
 ---
 
-## 🎮 Experiencia Visual & Diseño
+## 🎮 Experiencia de Usuario
 
-UltimateGym no es solo funcionalidad, es **una experiencia de usuario completa** diseñada para **motivar y enganchar**:
+### ✨ Interfaz Cyberpunk Moderna
+- **Colores Neón:** Morado y azul fluorescente sobre fondos oscuros para máximo contraste
+- **Animaciones:** Efectos fadeIn, scale, glow y gradientes en cada interacción
+- **Shadowbox Radiante:** Elementos con efecto de luz neón que responden al hover
+- **100% Responsive:** Perfecta en PC, tablet y móvil
 
-### ✨ Diseño Cyberpunk Moderno
-- **Colores Neón:** Morado y azul fluorescente sobre fondos oscuros para crear contraste visual hipnotizante
-- **Animaciones Suaves:** Efectos fadeIn, scale, glow y gradientes que fluyen constantemente
-- **Shadowbox Radiante:** Cada elemento brilla con efectos de luz neón que responden al hover
-- **Interfaz Responsiva:** Adaptada perfectly a PC, tablet y móvil sin perder la calidad visual
-
-### 💪 Gamificación & Motivación
-La app está diseñada para que el usuario **quiera volver**:
-- **Dashboard inspirador:** Estadísticas visuales con gráficas dinámicas que muestran tu progreso
-- **Interfaz intuitiva:** Flujos claros y rápidos para apuntarse a clases
-- **Feedback visual:** Cada acción tiene una respuesta inmediata (animaciones, notificaciones)
-- **Accesibilidad total:** Widgets de accesibilidad, contraste mejorado, navegación por teclado - porque entrenar incluye a todos
-
-### 🎯 Propósito
-UltimateGym existe para una sola cosa: **Hacerte querer entrenar 💪**
+### 💪 Diversión & Motivación
+- Dashboard con estadísticas visuales reales
+- Gráficas interactivas que muestran tu progreso
+- Feedback visual en cada acción (notificaciones, animaciones)
+- Accesibilidad integrada para que todos puedan entrenar
 
 ---
 
-👀 Accesibilidad: Pensando en Todos
+## 🛠️ Setup Local (Acceso Completo)
 
-UltimateGym incluye características de accesibilidad reales:
+Para **probar todas las funcionalidades sin restricciones**, clona y ejecuta en tu máquina:
 
-- **Widget de Accesibilidad:** Botón en esquina inferior derecha para activar modo accesible con alto contraste
-- **Skip Link:** Salta directamente al contenido principal (visible cuando el modo accesible está activado)
-- **Etiquetas ARIA:** Labels descriptivos en navegación, botones y componentes clave
-- **Alto Contraste:** Estilos específicos blanco sobre fondos oscuros para máxima legibilidad
-- **Focus Visible:** Todos los elementos interactivos tienen foco visible en navegación por teclado
-- **Respeta Preferencias del Sistema:** Detecta `prefers-color-scheme` del navegador
-- **Responsive:** Funciona perfectamente en todos los tamaños de pantalla
+### Requisitos
+- Node.js 18+
+- MongoDB local o conexión a MongoDB Atlas
 
-Queremos que entrenar sea accesible para todos. 💪
+### Instalación
 
----
+```bash
+# 1. Clona el repo
+git clone https://github.com/tu-usuario/UltimateGym-Project.git
+cd UltimateGym-Project
 
-## Tecnologías y stack
+# 2. Instala dependencias
+npm install
 
-- **Frontend:** React 19, Vite, CSS Modules, Recharts
-- **Backend:** Node.js, Express, MongoDB (Mongoose), Multer
-- **Auth:** JWT, roles, bcryptjs
-- **Otros:** n8n (webhook para emails), variables de entorno, seeds automáticos
+# 3. Configura .env (opcional - funciona con valores por defecto en local)
+cp .env.example .env
 
----
+# 4. Carga datos de ejemplo (seeds)
+node backend/seeds/index.js
 
-## ¿Cómo lo pruebas?
+# 5. Arranca todo (backend + frontend)
+npm run dev:all
+```
 
-1. Clona el repo y entra en la carpeta
-2. Copia `.env.example` a `.env` y pon tus datos (o deja los de local para probar)
-3. Instala dependencias:
-   - npm install
+Abre [http://localhost:3000](http://localhost:3000) y explora la app **completa y sin restricciones**.
 
-4. Ejecuta los seeds para tener datos de ejemplo:
-   
-   - node backend/seeds/index.js
-5. Arranca todo (backend y frontend a la vez):
-   ```
-   npm run dev:all
-   ```
-6. Abre [http://localhost:3000](http://localhost:3000) y explora la app
+### Credenciales de Prueba (Local)
+```
+Email: demo@portfolio.com
+Password: Demo123!
 
-### 🔒 Modo Demo (ideal para portfolio)
-
-- En la pantalla de login pulsa **"Entrar en modo demo"**.
-- O inicia sesión manualmente con estas credenciales (para mostrarlas en tu portfolio):
-   - **Email:** demo@portfolio.com
-   - **Password:** Demo123!
-- El backend crea una sesión con la cuenta demo y marca el token como `isDemo`.
-- La cuenta demo bloquea **solo cambios de cuenta**: no puede editar perfil ni eliminar la cuenta.
-- Sí permite probar el flujo principal de uso (inscribirse/desinscribirse en clases).
-- Si la cuenta demo no existe, el backend la crea automáticamente al arrancar (con `DEMO_USER_EMAIL`, `DEMO_USER_PASSWORD` y `DEMO_USER_NAME`).
-
+Email: admin@portfolio.com  (admin)
+Password: Admin123!
+```
 
 ---
 
-## Configuración opcional
+## 📊 Características Técnicas
 
-Estas características están implementadas en el proyecto y funcionan si las configuras:
+### Backend (Node.js + Express)
+- Autenticación JWT con roles (user/admin)
+- Validaciones completas con mensajes de error
+- Seeds automáticos con imágenes de ejemplo
+- Carga de archivos (PDF, imágenes) con Multer
+- Agregaciones MongoDB para estadísticas en tiempo real
+- CORS configurado
+- Manejo de errores robusto
 
-- **n8n (automatizaciones):** Conecta tu instancia de n8n para activar automáticamente:
-  - Envío de emails con guías personalizadas a usuarios
-  - Exportación automática de datos a hojas Excel
-  - Otros flujos de automatización que diseñes
-  
-  Configura `N8N_WEBHOOK_URL` en tu `.env` con tu webhook de n8n. Sin esta configuración, el proyecto funciona normalmente pero sin las automatizaciones.
-  
-  **Ejemplos de flujos de n8n implementados:**
-  
-  *Automatización de envío de guías por email:*
-  ![Flujo n8n Gmail](frontend-react/public/n8n%20Gmail.png)
-  
-  *Exportación automática de datos a Excel:*
-  ![Flujo n8n Excel](frontend-react/public/n8n_excel.png)
-  
-  *Se conoce que lo que se ha realizado con n8n se podría hacer de otras formas en código directamente pero se quería probar n8n en este proyecto para aprender formas diferentes de hacerlo*
+### Frontend (React + Vite)
+- Context API para estado global (Auth, Accesibilidad)
+- Componentes reutilizables
+- CSS Modules + variables CSS
+- Recharts para gráficas interactivas
+- Responsive design mobile-first
+- Widget de accesibilidad integrado
 
-  **Si quieres probar a hacerlo en código puedes utilizar las librerías nodemailer, exceljs etc.**
-
-
-
-
-
----
-
-## Cosas interesantes del código
-
-- Estructura clara: **MVC en backend**, componentes y contextos en frontend
-- Seeds con imágenes de ejemplo (¡no más apps vacías al clonar!)
-- **Autenticación JWT con roles** (user/admin) y validaciones completas
-- **Sistema de automatizaciones** integrado con n8n para envíos de emails y exportaciones
-- **Estadísticas avanzadas** con agregaciones MongoDB en tiempo real
-- **Filtros y búsquedas bidireccionales** (frontend y backend)
-- **Panel admin real** con gestión completa de usuarios, clases, ejercicios y guías
-- **Gráficas interactivas** con Recharts (lineal, circular, de barras)
-- **Gestión de archivos** (PDF y imágenes) con multer y almacenamiento en servidor
-- **Accesibilidad de verdad**, no solo por cumplir (WCAG compliance)
-- Código comentado y limpio, sin relleno ni funciones muertas
-- Variables de entorno bien documentadas
+### Base de Datos
+- MongoDB con Mongoose
+- Modelos: Usuario, Clase, Ejercicio, Guía, InteraccionPaco
+- Índices optimizados para búsquedas
+- Seeds con datos consistentes
 
 ---
 
 
-Cualquier cosa que necesites, sugerencias o demás, no dudes en contactarme por Linkedin 😉
+---
+
+## ⚠️ Modo Demo (Limitaciones)
+
+Si quieres **ver el proyecto rápido sin instalarlo**, usa la **[demo en vivo](https://ultimate-gym-project.vercel.app)**:
+
+**👤 Cuenta Usuario Demo:**
+```
+Email: demo@portfolio.com
+Password: Demo123!
+```
+
+**Limitaciones del usuario demo:**
+- ❌ No puedes editar perfil de usuario
+- ❌ No puedes cambiar contraseña
+- ❌ No puedes eliminar la cuenta
+
+**Lo que SÍ puedes hacer:**
+- ✅ Ver todas las clases y ejercicios
+- ✅ Inscribirse/desinscribirse en clases
+- ✅ Descargar guías en PDF
+- ✅ Ver estadísticas
+- ✅ Explorar toda la interfaz
+
+---
+
+**🛡️ Cuenta Admin Demo (Solo Lectura):**
+```
+Email: admin@portfolio.com
+Password: Admin123!
+```
+
+**Limitaciones del admin demo:**
+- ❌ No puedes crear/editar/eliminar usuarios
+- ❌ No puedes crear/editar/eliminar clases
+- ❌ No puedes crear/editar/eliminar ejercicios
+- ❌ No puedes crear/editar/eliminar guías
+
+**Lo que SÍ puedes hacer:**
+- ✅ Ver todo el panel de administración
+- ✅ Ver todos los usuarios registrados
+- ✅ Ver todas las clases con ocupación en tiempo real
+- ✅ Ver la biblioteca completa de ejercicios y guías
+- ✅ Ver estadísticas y gráficas avanzadas
+
+**Para acceso COMPLETO** sin restricciones, [sigue el setup local](#-setup-local-acceso-completo) 👆
+
+---
+
+## 🔧 Configuración Avanzada (Opcional)
+
+### n8n - Automatizaciones de Email y Datos
+
+El proyecto está preparado para integrar **n8n** (webhooks para automatizaciones):
+
+- **Envío automático de guías por email** a usuarios
+- **Exportación de datos a Excel** con un click
+- Otros flujos personalizados que diseñes
+
+Configura `N8N_WEBHOOK_URL` en `.env` para activarlas. Sin esto, la app funciona normalmente.
+
+**Ejemplo:** Con n8n puedes automatizar que al descargar una guía, se envíe un email confirmatorio. O exportar todos los usuarios a Excel automáticamente.
+
+*(Si prefieres hacerlo sin n8n, el proyecto está listo para usar nodemailer, exceljs directamente en código)*
+
+---
+
+## 💻 Puntos Fuertes del Código
+
+- ✅ **Estructura MVC clara** - Separación de concerns perfecta
+- ✅ **Seeds automáticos** - Datos + imágenes precargadas
+- ✅ **JWT + Roles** - Autenticación y autorización robusta
+- ✅ **Estadísticas en tiempo real** - Agregaciones MongoDB optimizadas
+- ✅ **Filtros bidireccionales** - Frontend + Backend
+- ✅ **Admin panel completo** - CRUD para todas las entidades
+- ✅ **Gráficas interactivas** - Recharts con datos dinámicos
+- ✅ **Gestión de archivos** - Multer para PDF e imágenes
+- ✅ **Accesibilidad WCAG** - No solo decoración, de verdad
+- ✅ **Código limpio** - Comentado, sin funciones muertas
+- ✅ **Env variables documentadas** - `.env.example` claro
+
+---
+
+## 📈 Despliegue en Vivo
+
+- **Frontend:** [Vercel](https://ultimate-gym-project.vercel.app) ⚡
+- **Backend:** [Render](https://ultimategym-project-portfolio.onrender.com) 🚀
+- **Tipo:** SPA Fullstack con API RESTful
+
+**Live demos:** El proyecto está **100% funcional en producción** con autoscaling y monitoreo.
+
+---
+
+## 🎯 Resumen
+
+UltimateGym es un **portfolio fullstack profesional** que demuestra:
+
+✔️ **Diseño moderno** - UI/UX atractiva y funcional  
+✔️ **Architecture sólida** - MVC, JWT, roles, validaciones  
+✔️ **Skills reales** - Desde frontend a backend, BD y DevOps  
+✔️ **Accesibilidad inclusiva** - WCAG compliance integrado  
+✔️ **Deploy profesional** - Vercel + Render en vivo  
+✔️ **Código limpio** - Ready-to-hire  
+
+---
+
+## 📞 Contacto
+
+**Iván Pons Martínez**
+
+🔗 [LinkedIn](https://www.linkedin.com/in/iván-pons-martínez-617609183)  
+💬 Sugerencias, feedback o solo decirme qué te parece → Mensaje en LinkedIn
+
+---
+
+**¡Gracias por pasarte por UltimateGym! 💪**

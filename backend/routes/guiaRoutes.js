@@ -10,7 +10,7 @@ const {
   actualizar,
   eliminar
 } = require('../controllers/guiaController');
-const { authenticateJWT, requireAdmin } = require('../middleware/auth');
+const { authenticateJWT, requireAdmin, requireNotDemoAdmin } = require('../middleware/auth');
 
 // Configuración de multer para subir PDFs de guías
 const storage = multer.diskStorage({ //configura almacenamiento para multer
@@ -45,7 +45,7 @@ const upload = multer({
 // GET /api/guias - Obtener todas
 router.get('/', authenticateJWT, requireAdmin, obtenerTodas);
 // POST /api/guias - Crear nueva 
-router.post('/', authenticateJWT, requireAdmin, upload.single('archivoPdf'), crear);
+router.post('/', authenticateJWT, requireAdmin, requireNotDemoAdmin, upload.single('archivoPdf'), crear);
 
 // Rutas para usuarios autenticados 
 // GET /api/guias/mis-guias - Obtener guías filtradas por objetivo
@@ -55,8 +55,8 @@ router.get('/mis-guias', authenticateJWT, obtenerMisGuias);
 // GET /api/guias/:id - Obtener guía por ID
 router.get('/:id', authenticateJWT, obtenerPorId);
 // PUT /api/guias/:id - Actualizar
-router.put('/:id', authenticateJWT, requireAdmin, upload.single('archivoPdf'), actualizar);
+router.put('/:id', authenticateJWT, requireAdmin, requireNotDemoAdmin, upload.single('archivoPdf'), actualizar);
 // DELETE /api/guias/:id - Eliminar
-router.delete('/:id', authenticateJWT, requireAdmin, eliminar);
+router.delete('/:id', authenticateJWT, requireAdmin, requireNotDemoAdmin, eliminar);
 
 module.exports = router;

@@ -10,7 +10,7 @@ const {
   getProfile,
   updateProfile
 } = require('../controllers/userController');
-const { authenticateJWT, requireAdmin, requireNotDemo } = require('../middleware/auth');
+const { authenticateJWT, requireAdmin, requireNotDemo, requireNotDemoAdmin } = require('../middleware/auth');
 
 //Autenticar un usuario 
 router.post('/login', loginUser);
@@ -23,10 +23,10 @@ router.put('/profile', authenticateJWT, requireNotDemo, updateProfile);
 //Obtener todos los usuarios 
 router.get('/', authenticateJWT, requireAdmin, getUsers);
 //Actualizar usuario por ID (solo admin)
-router.put('/:id', authenticateJWT, requireAdmin, updateUser);
+router.put('/:id', authenticateJWT, requireAdmin, requireNotDemoAdmin, updateUser);
 //Eliminar cuenta propia 
 router.delete('/me', authenticateJWT, requireNotDemo, deleteMyAccount);
 //Eliminar un usuario por ID 
-router.delete('/:id', authenticateJWT, requireAdmin, deleteUser);
+router.delete('/:id', authenticateJWT, requireAdmin, requireNotDemoAdmin, deleteUser);
 
 module.exports = router;

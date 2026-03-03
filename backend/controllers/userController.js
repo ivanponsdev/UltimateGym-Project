@@ -7,12 +7,21 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/Usuario');
 const JWT_SECRET = process.env.JWT_SECRET || 'devsecret';
 const DEMO_USER_EMAIL = (process.env.DEMO_USER_EMAIL || 'demo@portfolio.com').toLowerCase();
+const DEMO_ADMIN_EMAIL = (process.env.DEMO_ADMIN_EMAIL || 'admin@portfolio.com').toLowerCase();
 
 const isDemoAccount = (user) => {
     if (!user) return false;
     return Boolean(
         user.isDemo ||
         (user.email && user.email.toLowerCase() === DEMO_USER_EMAIL)
+    );
+};
+
+const isDemoAdminAccount = (user) => {
+    if (!user) return false;
+    return Boolean(
+        user.isDemoAdmin ||
+        (user.email && user.email.toLowerCase() === DEMO_ADMIN_EMAIL)
     );
 };
 
@@ -35,7 +44,7 @@ const loginUser = async (req, res) => {
         }
 
         // Firmar un token y devolverlo junto al usuario (sin contraseña)
-        const payload = { id: user._id, role: user.role, objetivo: user.objetivo, isDemo: isDemoAccount(user) };
+        const payload = { id: user._id, role: user.role, objetivo: user.objetivo, isDemo: isDemoAccount(user), isDemoAdmin: isDemoAdminAccount(user) };
         const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
         res.json({
             token,
@@ -48,6 +57,7 @@ const loginUser = async (req, res) => {
                 objetivoClasesSemana: user.objetivoClasesSemana,
                 role: user.role,
                 isDemo: isDemoAccount(user),
+                isDemoAdmin: isDemoAdminAccount(user),
                 primerAcceso: user.primerAcceso || false,
                 requiereActualizacionContraseña: user.requiereActualizacionContraseña || false,
                 createdAt: user.createdAt

@@ -22,6 +22,7 @@ const usuarioSchema = new mongoose.Schema({
 },
   role: { type: String, enum: ['user','admin'], default: 'user' },
   isDemo: { type: Boolean, default: false },
+  isDemoAdmin: { type: Boolean, default: false }, // true = admin de demo, solo lectura
   fechaBaja: { type: Date, default: null }, // null = usuario activo
   primerAcceso: { type: Boolean, default: true }, // true = primer acceso después del registro
   requiereActualizacionContraseña: { type: Boolean, default: false } // true = debe cambiar contraseña (admin la creó/cambió)

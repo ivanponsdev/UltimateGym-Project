@@ -11,7 +11,7 @@ const {
   actualizar,
   eliminar
 } = require('../controllers/ejercicioController');
-const { authenticateJWT, requireAdmin } = require('../middleware/auth');
+const { authenticateJWT, requireAdmin, requireNotDemoAdmin } = require('../middleware/auth');
 
 // Configuración de multer para subir imágenes de ejercicios
 const storage = multer.diskStorage({
@@ -50,8 +50,8 @@ router.get('/equipamiento/:tipo', authenticateJWT, obtenerPorEquipamiento);
 router.get('/:id', authenticateJWT, obtenerPorId);
 
 //protegidas
-router.post('/', authenticateJWT, requireAdmin, upload.single('imagenTecnica'), crear);
-router.put('/:id', authenticateJWT, requireAdmin, upload.single('imagenTecnica'), actualizar);
-router.delete('/:id', authenticateJWT, requireAdmin, eliminar);
+router.post('/', authenticateJWT, requireAdmin, requireNotDemoAdmin, upload.single('imagenTecnica'), crear);
+router.put('/:id', authenticateJWT, requireAdmin, requireNotDemoAdmin, upload.single('imagenTecnica'), actualizar);
+router.delete('/:id', authenticateJWT, requireAdmin, requireNotDemoAdmin, eliminar);
 
 module.exports = router;

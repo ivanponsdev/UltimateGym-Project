@@ -402,7 +402,7 @@ const EstadisticasSection = () => {
 
 const AdminDashboard = () => {
   const navigate = useNavigate()
-  const { user, logout } = useAuth()
+  const { user, logout, isDemoAdmin } = useAuth()
   const [activeSection, setActiveSection] = useState('estadisticas')
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
   
@@ -1173,6 +1173,26 @@ const AdminDashboard = () => {
 
   return (
     <div id="admin-container">
+      {/* Banner demo admin solo lectura */}
+      {isDemoAdmin && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 9999,
+          background: 'linear-gradient(90deg, #ff6b35, #f7931e)',
+          color: 'white',
+          textAlign: 'center',
+          padding: '0.6rem 1rem',
+          fontSize: '0.9rem',
+          fontWeight: 'bold',
+          boxShadow: '0 2px 8px rgba(255,107,53,0.5)'
+        }}>
+          🔒 Modo Demo (Solo Lectura) — Puedes ver todo el panel pero no modificar datos.
+          Para acceso completo, instala el proyecto en local.
+        </div>
+      )}
       {/* Header móvil con botones de sesión */}
       {isMobile && (
         <div className="mobile-header">
@@ -1206,6 +1226,7 @@ const AdminDashboard = () => {
             </div>
             <div id="users-list-container">
               <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+                {!isDemoAdmin && (
                 <button 
                   className="btn-neon btn-add" 
                   style={{ width: 'auto', padding: '0.8rem 1.5rem' }}
@@ -1213,6 +1234,7 @@ const AdminDashboard = () => {
                 >
                   Añadir Usuario
                 </button>
+                )}
               </div>
               <div className="table-wrapper">
                 {loading && users.length === 0 ? (
@@ -1240,6 +1262,7 @@ const AdminDashboard = () => {
                             {user.nombre} ({user.email})
                           </div>
                           <div className="mobile-admin-item-actions">
+                            {!isDemoAdmin && (
                             <button 
                               className="btn-icon btn-edit" 
                               onClick={() => handleEditUser(user)}
@@ -1247,6 +1270,8 @@ const AdminDashboard = () => {
                             >
                               ✏️
                             </button>
+                            )}
+                            {!isDemoAdmin && (
                             <button 
                               className="btn-icon btn-delete"
                               onClick={() => handleDeleteUser(user._id)}
@@ -1254,6 +1279,7 @@ const AdminDashboard = () => {
                             >
                               🗑️
                             </button>
+                            )}
                           </div>
                         </div>
                       ))}
@@ -1286,6 +1312,7 @@ const AdminDashboard = () => {
                           <td>{new Date(user.createdAt || user.fechaRegistro).toLocaleDateString()}</td>
                           <td>
                             <div className="action-buttons">
+                              {!isDemoAdmin && (
                               <button 
                                 className="btn-icon btn-edit" 
                                 onClick={() => handleEditUser(user)}
@@ -1293,6 +1320,8 @@ const AdminDashboard = () => {
                               >
                                 ✏️
                               </button>
+                              )}
+                              {!isDemoAdmin && (
                               <button 
                                 className="btn-icon btn-delete"
                                 onClick={() => handleDeleteUser(user._id)}
@@ -1300,6 +1329,8 @@ const AdminDashboard = () => {
                               >
                                 🗑️
                               </button>
+                              )}
+                              {isDemoAdmin && <span style={{color:'var(--text-color-dark)', fontSize:'0.8rem'}}>🔒 Solo lectura</span>}
                             </div>
                           </td>
                         </tr>
@@ -1335,6 +1366,7 @@ const AdminDashboard = () => {
                   <option value="domingo">Domingo</option>
                 </select>
               </div>
+              {!isDemoAdmin && (
               <button 
                 className="btn-neon btn-add" 
                 style={{ marginBottom: '20px', width: 'auto', padding: '0.8rem 1.5rem' }}
@@ -1342,6 +1374,7 @@ const AdminDashboard = () => {
               >
                 Añadir Clase
               </button>
+              )}
               <div className="table-wrapper">
                 {loading && clases.length === 0 ? (
                   <div className="spinner-container">
@@ -1377,6 +1410,7 @@ const AdminDashboard = () => {
                             </span>
                           </div>
                           <div className="mobile-admin-item-actions">
+                            {!isDemoAdmin && (
                             <button 
                               className="btn-icon btn-edit" 
                               onClick={() => handleEditClase(clase)}
@@ -1384,6 +1418,8 @@ const AdminDashboard = () => {
                             >
                               ✏️
                             </button>
+                            )}
+                            {!isDemoAdmin && (
                             <button 
                               className="btn-icon btn-delete"
                               onClick={() => handleDeleteClase(clase._id)}
@@ -1391,6 +1427,7 @@ const AdminDashboard = () => {
                             >
                               🗑️
                             </button>
+                            )}
                           </div>
                         </div>
                       ))}
@@ -1433,6 +1470,7 @@ const AdminDashboard = () => {
                           </td>
                           <td>
                             <div className="action-buttons">
+                              {!isDemoAdmin && (
                               <button 
                                 className="btn-icon btn-edit" 
                                 onClick={() => handleEditClase(clase)}
@@ -1440,6 +1478,8 @@ const AdminDashboard = () => {
                               >
                                 ✏️
                               </button>
+                              )}
+                              {!isDemoAdmin && (
                               <button 
                                 className="btn-icon btn-delete"
                                 onClick={() => handleDeleteClase(clase._id)}
@@ -1447,6 +1487,8 @@ const AdminDashboard = () => {
                               >
                                 🗑️
                               </button>
+                              )}
+                              {isDemoAdmin && <span style={{color:'var(--text-color-dark)', fontSize:'0.8rem'}}>🔒 Solo lectura</span>}
                             </div>
                           </td>
                         </tr>
@@ -1472,6 +1514,7 @@ const AdminDashboard = () => {
               />
             </div>
             <div id="ejercicios-list-container">
+              {!isDemoAdmin && (
               <button 
                 className="btn-neon btn-add" 
                 style={{ marginBottom: '20px', width: 'auto', padding: '0.8rem 1.5rem' }}
@@ -1479,6 +1522,7 @@ const AdminDashboard = () => {
               >
                 Añadir Ejercicio
               </button>
+              )}
               <div className="table-wrapper">
                 {loading && ejercicios.length === 0 ? (
                   <div className="spinner-container">
@@ -1504,6 +1548,7 @@ const AdminDashboard = () => {
                             {ejercicio.nombre}
                           </div>
                           <div className="mobile-admin-item-actions">
+                            {!isDemoAdmin && (
                             <button 
                               className="btn-icon btn-edit" 
                               onClick={() => handleEditEjercicio(ejercicio)}
@@ -1511,6 +1556,8 @@ const AdminDashboard = () => {
                             >
                               ✏️
                             </button>
+                            )}
+                            {!isDemoAdmin && (
                             <button 
                               className="btn-icon btn-delete"
                               onClick={() => handleDeleteEjercicio(ejercicio._id)}
@@ -1518,6 +1565,7 @@ const AdminDashboard = () => {
                             >
                               🗑️
                             </button>
+                            )}
                           </div>
                         </div>
                       ))}
@@ -1553,6 +1601,7 @@ const AdminDashboard = () => {
                           </td>
                           <td>
                             <div className="action-buttons">
+                              {!isDemoAdmin && (
                               <button 
                                 className="btn-icon btn-edit" 
                                 onClick={() => handleEditEjercicio(ejercicio)}
@@ -1560,6 +1609,8 @@ const AdminDashboard = () => {
                               >
                                 ✏️
                               </button>
+                              )}
+                              {!isDemoAdmin && (
                               <button 
                                 className="btn-icon btn-delete"
                                 onClick={() => handleDeleteEjercicio(ejercicio._id)}
@@ -1567,6 +1618,8 @@ const AdminDashboard = () => {
                               >
                                 🗑️
                               </button>
+                              )}
+                              {isDemoAdmin && <span style={{color:'var(--text-color-dark)', fontSize:'0.8rem'}}>🔒 Solo lectura</span>}
                             </div>
                           </td>
                         </tr>
@@ -1592,6 +1645,7 @@ const AdminDashboard = () => {
               />
             </div>
             <div style={{ marginBottom: '20px', display: 'flex', gap: '10px' }}>
+              {!isDemoAdmin && (
               <button 
                 className="btn-neon btn-add" 
                 style={{ width: 'auto', padding: '0.8rem 1.5rem' }}
@@ -1599,6 +1653,7 @@ const AdminDashboard = () => {
               >
                 Añadir Guía
               </button>
+              )}
             </div>
             <div id="guias-list-container">
               <div className="table-wrapper">
@@ -1627,6 +1682,7 @@ const AdminDashboard = () => {
                             {guia.titulo}
                           </div>
                           <div className="mobile-admin-item-actions">
+                            {!isDemoAdmin && (
                             <button 
                               className="btn-icon btn-edit" 
                               onClick={() => handleEditGuia(guia)}
@@ -1634,6 +1690,8 @@ const AdminDashboard = () => {
                             >
                               ✏️
                             </button>
+                            )}
+                            {!isDemoAdmin && (
                             <button 
                               className="btn-icon btn-delete"
                               onClick={() => handleDeleteGuia(guia._id)}
@@ -1641,6 +1699,7 @@ const AdminDashboard = () => {
                             >
                               🗑️
                             </button>
+                            )}
                           </div>
                         </div>
                       ))}
@@ -1677,6 +1736,7 @@ const AdminDashboard = () => {
                           </td>
                           <td>
                             <div className="action-buttons">
+                              {!isDemoAdmin && (
                               <button 
                                 className="btn-icon btn-edit" 
                                 onClick={() => handleEditGuia(guia)}
@@ -1684,6 +1744,8 @@ const AdminDashboard = () => {
                               >
                                 ✏️
                               </button>
+                              )}
+                              {!isDemoAdmin && (
                               <button 
                                 className="btn-icon btn-delete"
                                 onClick={() => handleDeleteGuia(guia._id)}
@@ -1691,6 +1753,8 @@ const AdminDashboard = () => {
                               >
                                 🗑️
                               </button>
+                              )}
+                              {isDemoAdmin && <span style={{color:'var(--text-color-dark)', fontSize:'0.8rem'}}>🔒 Solo lectura</span>}
                             </div>
                           </td>
                         </tr>
