@@ -54,6 +54,16 @@ app.use('/api/stats', rutasStats);
 app.use('/api/export', rutasExport);
 app.use('/api/email', rutasEmail);
 
+// Endpoint de health check para UptimeRobot (keep-alive sin autenticación)
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
 // En desarrollo, el frontend corre en Vite (puerto 3000)
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../frontend-react/dist')));

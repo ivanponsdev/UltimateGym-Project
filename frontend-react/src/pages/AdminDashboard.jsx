@@ -257,32 +257,7 @@ const EstadisticasSection = () => {
               </p>
             </div>
 
-            {/* Asistente Paco (LandBot) */}
-            <div style={{
-              padding: '1.5rem',
-              background: 'linear-gradient(135deg, rgba(255, 255, 0, 0.1) 0%, rgba(0, 255, 0, 0.1) 100%)',
-              borderRadius: '12px',
-              border: '2px solid rgba(255, 255, 0, 0.3)',
-              position: 'relative',
-              overflow: 'hidden'
-            }}>
-              <div style={{
-                position: 'absolute',
-                top: '-10px',
-                right: '-10px',
-                fontSize: '4rem',
-                opacity: '0.1'
-              }}>🤖</div>
-              <h4 style={{margin: '0 0 0.5rem 0', fontSize: '0.9rem', color: 'var(--text-color-dark)', textTransform: 'uppercase', letterSpacing: '1px'}}>
-                Asistente Paco
-              </h4>
-              <p style={{margin: '0.5rem 0', fontSize: '1.8rem', fontWeight: 'bold', color: '#FFFF00'}}>
-                {stats.interaccionesLandBot ?? '---'}
-              </p>
-              <p style={{margin: '0.5rem 0 0 0', fontSize: '0.85rem', color: 'var(--text-color-dark)'}}>
-                Conversaciones iniciadas
-              </p>
-            </div>
+
           </div>
         </div>
       )}

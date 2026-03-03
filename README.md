@@ -29,7 +29,7 @@ UltimateGym es una SPA fullstack completa donde puedes:
 - Estadísticas detalladas (usuarios por objetivo, clases populares, inscripciones, análisis por día)
 - Exportación de datos de usuarios y clases (preparado para automatizar a Excel con n8n)
 - **Envío automático de guías por email** a través de n8n
-- Chat en vivo con Landbot
+
 - Accesibilidad real (widgets, skiplinks, contraste, etc.)
 
 Todo con seeds de ejemplo para que lo veas funcionando nada más clonar.
@@ -79,7 +79,7 @@ Queremos que entrenar sea accesible para todos. 💪
 - **Frontend:** React 19, Vite, CSS Modules, Recharts
 - **Backend:** Node.js, Express, MongoDB (Mongoose), Multer
 - **Auth:** JWT, roles, bcryptjs
-- **Otros:** Landbot, n8n (webhook para emails), variables de entorno, seeds automáticos
+- **Otros:** n8n (webhook para emails), variables de entorno, seeds automáticos
 
 ---
 
@@ -138,7 +138,7 @@ Estas características están implementadas en el proyecto y funcionan si las co
 
 
 
-- **Landbot (chat en vivo):** El ChatBot funcionará correctamente porque está el link del landbot siempre en escucha. Si quieres insertar otro modifica el enlace del LandBot.
+
 
 ---
 

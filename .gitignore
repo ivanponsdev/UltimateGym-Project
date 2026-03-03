@@ -9,6 +9,9 @@ package-lock.json
 .env.test.local
 .env.production.local
 
+# Configuration & Monitoring (Private)
+UPTIMEROBOT_SETUP.md
+
 # Build outputs
 dist/
 build/

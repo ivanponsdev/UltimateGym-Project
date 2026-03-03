@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { userAPI, clasesAPI, ejerciciosAPI, guiasAPI } from '../services/api'
 import Sidebar from '../components/Sidebar'
 import CustomModal from '../components/CustomModal'
-import LandBotWidget from '../components/LandBotWidget'
+
 import { EjercicioCard, GuiaCard, ClaseCard } from '../components/CardComponents'
 
 // Componente para la sección de ejercicios
@@ -1221,15 +1221,46 @@ const Dashboard = () => {
         {activeSection === 'paco' && (
           <section className="content-section active">
             <h2>🤖 Asistente Virtual</h2>
-            <p style={{marginBottom: '1.5rem', color: 'var(--text-color-dark)'}}>
-              Tu asistente personal para resolver dudas sobre entrenamiento, nutrición y más
-            </p>
-            <div style={{ 
-              height: 'calc(100vh - 250px)', 
-              minHeight: '600px',
-              display: 'flex'
+            <div style={{
+              background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
+              border: '2px solid rgba(102, 126, 234, 0.3)',
+              borderRadius: '12px',
+              padding: '3rem 2rem',
+              textAlign: 'center',
+              minHeight: '500px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '1.5rem'
             }}>
-              <LandBotWidget height="100%" width="100%" />
+              <div style={{ fontSize: '4rem' }}>🚀</div>
+              <h3 style={{
+                margin: '0',
+                fontSize: '1.8rem',
+                color: 'var(--text-color-dark)',
+                fontWeight: '600'
+              }}>
+                Estamos trabajando en traer un asistente virtual
+              </h3>
+              <p style={{
+                margin: '0',
+                fontSize: '1.1rem',
+                color: 'var(--text-color-dark)',
+                maxWidth: '500px',
+                lineHeight: '1.6'
+              }}>
+                que te ayude con tus consultas sobre entrenamiento y alimentación.
+              </p>
+              <p style={{
+                margin: '1rem 0 0 0',
+                fontSize: '1.3rem',
+                fontWeight: 'bold',
+                color: '#667eea',
+                animation: 'pulse 2s infinite'
+              }}>
+                ¡Muy pronto!
+              </p>
             </div>
           </section>
         )}
