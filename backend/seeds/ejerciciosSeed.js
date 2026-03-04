@@ -31,7 +31,8 @@ const ejerciciosData = [
     descripcion: 'Ejercicio compuesto para pecho y tríceps. Inclínate hacia adelante para mayor activación del pecho.',
     grupoMuscular: 'pecho',
     dificultad: 'intermedio',
-    equipamiento: 'gimnasio'
+    equipamiento: 'gimnasio',
+    imagenTecnica: 'uploads/ejercicios/fondos_paralelas.png'
   },
 
   // ESPALDA
@@ -74,35 +75,40 @@ const ejerciciosData = [
     descripcion: 'Ejercicio fundamental para piernas. Baja hasta que los muslos estén paralelos al suelo manteniendo la espalda recta.',
     grupoMuscular: 'piernas',
     dificultad: 'intermedio',
-    equipamiento: 'gimnasio'
+    equipamiento: 'gimnasio',
+    imagenTecnica: 'uploads/ejercicios/sentadilla_con_barra.png'
   },
   {
     nombre: 'Zancadas',
     descripcion: 'Ejercicio unilateral para piernas. Da un paso largo adelante y baja hasta que ambas rodillas formen 90 grados.',
     grupoMuscular: 'piernas',
     dificultad: 'principiante',
-    equipamiento: 'casa'
+    equipamiento: 'casa',
+    imagenTecnica: 'uploads/ejercicios/zancadas.png'
   },
   {
     nombre: 'Prensa de piernas',
     descripcion: 'Ejercicio de empuje para cuádriceps y glúteos. Coloca los pies al ancho de hombros en la plataforma.',
     grupoMuscular: 'piernas',
     dificultad: 'principiante',
-    equipamiento: 'gimnasio'
+    equipamiento: 'gimnasio',
+    imagenTecnica: 'uploads/ejercicios/prensa_piernas.png'
   },
   {
     nombre: 'Sentadillas búlgaras',
     descripcion: 'Variante unilateral de sentadilla. Coloca un pie elevado detrás y baja con la pierna delantera.',
     grupoMuscular: 'piernas',
     dificultad: 'intermedio',
-    equipamiento: 'casa'
+    equipamiento: 'casa',
+    imagenTecnica: 'uploads/ejercicios/sentadillas_bulgaras.png'
   },
   {
     nombre: 'Curl femoral',
     descripcion: 'Ejercicio de aislamiento para los isquiotibiales. Flexiona las rodillas llevando los talones hacia los glúteos.',
     grupoMuscular: 'piernas',
     dificultad: 'principiante',
-    equipamiento: 'gimnasio'
+    equipamiento: 'gimnasio',
+    imagenTecnica: 'uploads/ejercicios/curl_femoral.png'
   },
 
   // HOMBROS
@@ -135,7 +141,8 @@ const ejerciciosData = [
     descripcion: 'Ejercicio para deltoides posteriores. Inclínate hacia adelante y abre los brazos lateralmente.',
     grupoMuscular: 'hombros',
     dificultad: 'intermedio',
-    equipamiento: 'casa'
+    equipamiento: 'casa',
+    imagenTecnica: 'uploads/ejercicios/deltoides_posteriores.png'
   },
 
   // BRAZOS
