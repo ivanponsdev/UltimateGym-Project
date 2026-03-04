@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { userAPI, clasesAPI, ejerciciosAPI, guiasAPI } from '../services/api'
+import { userAPI, clasesAPI, ejerciciosAPI, guiasAPI, BACKEND_URL } from '../services/api'
 import Sidebar from '../components/Sidebar'
 import CustomModal from '../components/CustomModal'
 
@@ -211,7 +211,7 @@ const GuiasSection = () => {
     const link = document.createElement('a')
     // Normalizar la ruta: quitar prefijo 'backend/' y backslashes de Windows
     const url = guia.archivoUrl.replace(/\\/g, '/').replace(/^backend\//, '')
-    link.href = `/${url}`
+    link.href = `${BACKEND_URL}/${url}`
     link.download = `${guia.titulo}.pdf`
     link.target = '_blank'
     document.body.appendChild(link)
@@ -229,7 +229,7 @@ const GuiasSection = () => {
       setEnviandoEmail(true)
       const token = localStorage.getItem('token')
       
-      const response = await fetch('http://localhost:5001/api/email/send-guides', {
+      const response = await fetch(`${BACKEND_URL}/api/email/send-guides`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

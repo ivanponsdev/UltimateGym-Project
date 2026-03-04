@@ -1,4 +1,5 @@
-const API_URL = 'https://ultimategym-project-portfolio.onrender.com/api'
+export const API_URL = 'https://ultimategym-project-portfolio.onrender.com/api'
+export const BACKEND_URL = API_URL.replace(/\/api$/, '')
 
 // Función auxiliar para manejar respuestas
 const handleResponse = async (response) => {
