@@ -1236,10 +1236,18 @@ const Dashboard = () => {
 
         {activeSection === 'ejercicios' && (
           <EjerciciosSection 
-            onSelectEjercicio={(ejercicio) => {
+            onSelectEjercicio={async (ejercicio) => {
+              // Mostrar el modal de inmediato con los datos del listado
               setEjercicioSeleccionado(ejercicio)
               setMostrarModalEjercicio(true)
               setTabActivoEjercicio('detalles')
+              // Refrescar con datos frescos de la BD para garantizar imagenTecnica actualizada
+              try {
+                const fresco = await ejerciciosAPI.obtenerPorId(ejercicio._id)
+                setEjercicioSeleccionado(fresco)
+              } catch (e) {
+                console.error('No se pudo refrescar el ejercicio:', e)
+              }
             }}
           />
         )}
