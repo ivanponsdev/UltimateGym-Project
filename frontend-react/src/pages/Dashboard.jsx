@@ -207,13 +207,16 @@ const GuiasSection = () => {
   }
 
   const descargarGuia = (guia) => {
-    // Crear un enlace para descargar el PDF
-    const link = document.createElement('a')
-    // Normalizar la ruta: quitar prefijo 'backend/' y backslashes de Windows
+    if (!guia?.archivoUrl) {
+      alert('❌ Esta guía no tiene archivo asociado')
+      return
+    }
+
     const url = guia.archivoUrl.replace(/\\/g, '/').replace(/^backend\//, '')
-    link.href = `${BACKEND_URL}/${url}`
-    link.download = `${guia.titulo}.pdf`
-    link.target = '_blank'
+    const downloadUrl = encodeURI(`${BACKEND_URL}/${url}`)
+
+    const link = document.createElement('a')
+    link.href = downloadUrl
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
