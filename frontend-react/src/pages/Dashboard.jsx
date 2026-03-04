@@ -468,6 +468,55 @@ const Dashboard = () => {
     loadMisClases()
   }
 
+  useEffect(() => {
+    const handleExternalDataChange = (payload) => {
+      const scope = payload?.scope
+      if (scope !== 'clases' && scope !== 'global') return
+
+      sessionStorage.removeItem('clases')
+      sessionStorage.removeItem('misClases')
+      setClases([])
+      setMisClases([])
+
+      if (activeSection === 'clases' || activeSection === 'mis-clases') {
+        loadClases()
+        loadMisClases()
+      }
+    }
+
+    const onStorage = (event) => {
+      if (event.key !== 'ultimategym-data-change' || !event.newValue) return
+      try {
+        handleExternalDataChange(JSON.parse(event.newValue))
+      } catch (error) {
+        console.error('Error procesando sincronización de datos:', error)
+      }
+    }
+
+    const onDataChange = (event) => {
+      handleExternalDataChange(event.detail)
+    }
+
+    window.addEventListener('storage', onStorage)
+    window.addEventListener('ultimategym-data-change', onDataChange)
+
+    return () => {
+      window.removeEventListener('storage', onStorage)
+      window.removeEventListener('ultimategym-data-change', onDataChange)
+    }
+  }, [activeSection])
+
+  useEffect(() => {
+    if (activeSection !== 'clases' && activeSection !== 'mis-clases') return
+
+    const interval = setInterval(() => {
+      loadClases()
+      loadMisClases()
+    }, 30000)
+
+    return () => clearInterval(interval)
+  }, [activeSection])
+
   const handleEditProfile = () => {
     if (isDemo) {
       setModalConfig({

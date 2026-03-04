@@ -405,11 +405,25 @@ const AdminDashboard = () => {
   const { user, logout, isDemoAdmin } = useAuth()
   const [activeSection, setActiveSection] = useState('estadisticas')
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
+
+  const normalizeEntityId = (entity) => {
+    if (!entity) return entity
+    if (entity._id) return entity
+    if (entity.id) return { ...entity, _id: entity.id }
+    return entity
+  }
+
+  const normalizeUsersWithId = (usersList = []) => usersList.map(normalizeEntityId)
   
   // Inicializar desde sessionStorage si existe
   const [users, setUsers] = useState(() => {
     const cached = sessionStorage.getItem('adminUsers')
-    return cached ? JSON.parse(cached) : []
+    if (!cached) return []
+    try {
+      return normalizeUsersWithId(JSON.parse(cached))
+    } catch {
+      return []
+    }
   })
   const [clases, setClases] = useState(() => {
     const cached = sessionStorage.getItem('adminClases')
@@ -434,6 +448,16 @@ const AdminDashboard = () => {
     message: '',
     onConfirm: null
   })
+
+  const notifyDataChange = (scope = 'global') => {
+    try {
+      const payload = { scope, timestamp: Date.now() }
+      localStorage.setItem('ultimategym-data-change', JSON.stringify(payload))
+      window.dispatchEvent(new CustomEvent('ultimategym-data-change', { detail: payload }))
+    } catch (error) {
+      console.error('No se pudo notificar el cambio de datos:', error)
+    }
+  }
   
   // Estados usuarios
   const [showUserModal, setShowUserModal] = useState(false)
@@ -515,7 +539,7 @@ const AdminDashboard = () => {
     setLoading(true)
     try {
       const data = await userAPI.getAllUsers()
-      const usersData = data.usuarios || []
+      const usersData = normalizeUsersWithId(data.usuarios || [])
       setUsers(usersData)
       sessionStorage.setItem('adminUsers', JSON.stringify(usersData))
     } catch (error) {
@@ -598,6 +622,17 @@ const AdminDashboard = () => {
   }
 
   const handleDeleteUser = async (userId) => {
+    if (!userId) {
+      setModalConfig({
+        isOpen: true,
+        type: 'alert',
+        message: 'No se pudo eliminar: ID de usuario no válido.',
+        iconType: 'error',
+        onConfirm: null
+      })
+      return
+    }
+
     setModalConfig({
       isOpen: true,
       type: 'confirm',
@@ -606,6 +641,7 @@ const AdminDashboard = () => {
       onConfirm: async () => {
         try {
           await userAPI.deleteUser(userId)
+          notifyDataChange('users')
           setModalConfig({
             isOpen: true,
             type: 'alert',
@@ -636,6 +672,7 @@ const AdminDashboard = () => {
       onConfirm: async () => {
         try {
           await clasesAPI.delete(claseId)
+          notifyDataChange('clases')
           setModalConfig({
             isOpen: true,
             type: 'alert',
@@ -665,6 +702,7 @@ const AdminDashboard = () => {
       onConfirm: async () => {
         try {
           await ejerciciosAPI.eliminar(ejercicioId)
+          notifyDataChange('ejercicios')
           setModalConfig({
             isOpen: true,
             type: 'alert',
@@ -695,6 +733,7 @@ const AdminDashboard = () => {
       onConfirm: async () => {
         try {
           await guiasAPI.eliminar(guiaId)
+          notifyDataChange('guias')
           setModalConfig({
             isOpen: true,
             type: 'alert',
@@ -834,15 +873,27 @@ const AdminDashboard = () => {
   }
 
   const handleEditUser = (user) => {
-    setEditingUser(user)
+    const normalizedUser = normalizeEntityId(user)
+    if (!normalizedUser?._id) {
+      setModalConfig({
+        isOpen: true,
+        type: 'alert',
+        message: 'No se pudo editar: ID de usuario no válido.',
+        iconType: 'error',
+        onConfirm: null
+      })
+      return
+    }
+
+    setEditingUser(normalizedUser)
     setUserForm({
-      nombre: user.nombre,
-      email: user.email,
+      nombre: normalizedUser.nombre,
+      email: normalizedUser.email,
       password: '',
-      edad: user.edad || '',
-      sexo: user.sexo || 'otro',
-      objetivo: user.objetivo || 'recomposicion_corporal',
-      role: user.role
+      edad: normalizedUser.edad || '',
+      sexo: normalizedUser.sexo || 'otro',
+      objetivo: normalizedUser.objetivo || 'recomposicion_corporal',
+      role: normalizedUser.role
     })
     setValidationErrors({ nombre: '', email: '', password: '' })
     setShowUserModal(true)
@@ -893,9 +944,21 @@ const AdminDashboard = () => {
       
       if (editingUser) {
         // Editar usuario existente
+        const editingUserId = editingUser._id || editingUser.id
+        if (!editingUserId) {
+          setModalConfig({
+            isOpen: true,
+            type: 'alert',
+            message: 'No se pudo actualizar: ID de usuario no válido.',
+            iconType: 'error',
+            onConfirm: null
+          })
+          return
+        }
         const updateData = { ...userForm }
         if (!updateData.password) delete updateData.password // No actualizar password si está vacío
-        await userAPI.updateUser(editingUser._id, updateData)
+        await userAPI.updateUser(editingUserId, updateData)
+        notifyDataChange('users')
         setModalConfig({
           isOpen: true,
           type: 'alert',
@@ -916,6 +979,7 @@ const AdminDashboard = () => {
           return
         }
         await userAPI.createUser(userForm)
+        notifyDataChange('users')
         setModalConfig({
           isOpen: true,
           type: 'alert',
@@ -973,6 +1037,7 @@ const AdminDashboard = () => {
       if (editingClase) {
         // Editar clase existente
         await clasesAPI.update(editingClase._id, claseForm)
+        notifyDataChange('clases')
         setModalConfig({
           isOpen: true,
           type: 'alert',
@@ -983,6 +1048,7 @@ const AdminDashboard = () => {
       } else {
         // Crear nueva clase
         await clasesAPI.create(claseForm)
+        notifyDataChange('clases')
         setModalConfig({
           isOpen: true,
           type: 'alert',
@@ -1047,6 +1113,7 @@ const AdminDashboard = () => {
       if (editingEjercicio) {
         // Editar ejercicio existente
         await ejerciciosAPI.actualizar(editingEjercicio._id, ejercicioForm)
+        notifyDataChange('ejercicios')
         setModalConfig({
           isOpen: true,
           type: 'alert',
@@ -1057,6 +1124,7 @@ const AdminDashboard = () => {
       } else {
         // Crear nuevo ejercicio
         await ejerciciosAPI.crear(ejercicioForm)
+        notifyDataChange('ejercicios')
         setModalConfig({
           isOpen: true,
           type: 'alert',
@@ -1119,6 +1187,7 @@ const AdminDashboard = () => {
 
       if (editingGuia) {
         await guiasAPI.actualizar(editingGuia._id, guiaForm)
+        notifyDataChange('guias')
         setModalConfig({
           isOpen: true,
           type: 'alert',
@@ -1128,6 +1197,7 @@ const AdminDashboard = () => {
         })
       } else {
         await guiasAPI.crear(guiaForm)
+        notifyDataChange('guias')
         setModalConfig({
           isOpen: true,
           type: 'alert',
@@ -1276,7 +1346,7 @@ const AdminDashboard = () => {
                         })
                         .sort((a, b) => new Date(b.createdAt || b.fechaRegistro) - new Date(a.createdAt || a.fechaRegistro))
                         .map((user) => (
-                        <div key={user._id} className="mobile-admin-item">
+                        <div key={user._id || user.id || user.email} className="mobile-admin-item">
                           <div className="mobile-admin-item-text">
                             {user.nombre} ({user.email})
                           </div>
@@ -1293,7 +1363,7 @@ const AdminDashboard = () => {
                             {!isDemoAdmin && (
                             <button 
                               className="btn-icon btn-delete"
-                              onClick={() => handleDeleteUser(user._id)}
+                              onClick={() => handleDeleteUser(user._id || user.id)}
                               title="Eliminar usuario"
                             >
                               🗑️
@@ -1324,7 +1394,7 @@ const AdminDashboard = () => {
                         })
                         .sort((a, b) => new Date(b.createdAt || b.fechaRegistro) - new Date(a.createdAt || a.fechaRegistro))
                         .map((user) => (
-                        <tr key={user._id}>
+                        <tr key={user._id || user.id || user.email}>
                           <td>{user.nombre}</td>
                           <td>{user.email}</td>
                           <td>{user.role}</td>
@@ -1343,7 +1413,7 @@ const AdminDashboard = () => {
                               {!isDemoAdmin && (
                               <button 
                                 className="btn-icon btn-delete"
-                                onClick={() => handleDeleteUser(user._id)}
+                                onClick={() => handleDeleteUser(user._id || user.id)}
                                 title="Eliminar usuario"
                               >
                                 🗑️

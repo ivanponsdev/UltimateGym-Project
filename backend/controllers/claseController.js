@@ -1,6 +1,25 @@
 const Clase = require('../models/Clase');
 const Usuario = require('../models/Usuario');
 
+const syncClaseEnUsuarioLegacy = async ({ usuarioId, claseId, action }) => {
+  if (!usuarioId || !claseId) return;
+
+  if (action === 'add') {
+    await Usuario.updateOne(
+      { _id: usuarioId },
+      { $addToSet: { clasesInscritas: claseId } }
+    );
+    return;
+  }
+
+  if (action === 'remove') {
+    await Usuario.updateOne(
+      { _id: usuarioId },
+      { $pull: { clasesInscritas: claseId } }
+    );
+  }
+};
+
 //Obtener todas las clases (públicas/activas)
 const getClases = async (req, res) => {
   try {
@@ -248,9 +267,12 @@ const deleteClase = async (req, res) => {
     // Obtener lista de alumnos afectados antes de eliminar
     const alumnosApuntados = clase.alumnosApuntados || [];
     const cantidadAlumnosAfectados = alumnosApuntados.length;
-    
-    // Opcional: guardar un registro de auditoría o notificación (para futuras implementaciones)
-    // Los usuarios tendrían que recargar su lista de clases para ver que fue eliminada
+
+    // Limpieza defensiva en usuarios (compatibilidad con posibles datos legacy)
+    const usuariosActualizados = await Usuario.updateMany(
+      { clasesInscritas: clase._id },
+      { $pull: { clasesInscritas: clase._id } }
+    );
     
     // Eliminar la clase
     await Clase.findByIdAndDelete(req.params.id);
@@ -263,7 +285,10 @@ const deleteClase = async (req, res) => {
         alumnosAfectados: cantidadAlumnosAfectados,
         alumnosIds: alumnosApuntados
       },
-      notaAdmin: `Se han afectado ${cantidadAlumnosAfectados} alumno(s). Considerar notificación manual si es necesario.`
+      limpieza: {
+        usuariosLegacyActualizados: usuariosActualizados.modifiedCount || 0
+      },
+      notaAdmin: `Se han afectado ${cantidadAlumnosAfectados} alumno(s).`
     });
   } catch (error) {
     console.error('Error al eliminar clase:', error);
@@ -317,6 +342,13 @@ const inscribirseEnClase = async (req, res) => {
     // Agregar usuario a la clase
     clase.alumnosApuntados.push(usuarioId);
     await clase.save();
+
+    // Mantener sincronizado posible campo legacy en Usuario
+    await syncClaseEnUsuarioLegacy({
+      usuarioId,
+      claseId: clase._id,
+      action: 'add'
+    });
     
     res.json({ 
       message: `Te has inscrito exitosamente en ${clase.nombre}`,
@@ -360,6 +392,13 @@ const desinscribirseDeClase = async (req, res) => {
       id => id.toString() !== usuarioId.toString()
     );
     await clase.save();
+
+    // Mantener sincronizado posible campo legacy en Usuario
+    await syncClaseEnUsuarioLegacy({
+      usuarioId,
+      claseId: clase._id,
+      action: 'remove'
+    });
     
     res.json({ 
       message: `Te has desinscrito correctamente de ${clase.nombre}`,
