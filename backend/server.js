@@ -5,6 +5,7 @@ const path = require('path');
 const connectDB = require("./config/db"); // Conexión a MongoDB
 const mongoose = require('mongoose');
 const ensureDemoUser = require('./services/demoUserService');
+const ensureEjerciciosImagenes = require('./services/ejerciciosImagenesService');
 
 // Crear la aplicación Express y conectar a la base de datos MongoDB
 const app = express();
@@ -93,6 +94,7 @@ const PORT = process.env.PORT || 5001;
 const iniciarServidor = async () => {
   await connectDB();
   await ensureDemoUser();
+  await ensureEjerciciosImagenes();
 
   servidor = app.listen(PORT, () => {
     console.log(` Servidor Fase 1 iniciado en http://localhost:${PORT}`);
