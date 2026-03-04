@@ -223,7 +223,7 @@ const Auth = () => {
                 <button
                   type="button"
                   className="btn-neon"
-                  style={{ flex: 1, background: 'transparent', fontSize: '0.85rem' }}
+                  style={{ flex: 1, background: 'transparent', fontSize: '0.85rem', color: 'var(--primary-color)' }}
                   onClick={handleDemoLogin}
                 >
                   👤 Demo Usuario
