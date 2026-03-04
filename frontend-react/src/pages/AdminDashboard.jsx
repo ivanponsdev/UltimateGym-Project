@@ -425,6 +425,7 @@ const AdminDashboard = () => {
   })
   
   const [loading, setLoading] = useState(false)
+  const [showDemoBanner, setShowDemoBanner] = useState(true)
   
   // Estados para modales personalizados
   const [modalConfig, setModalConfig] = useState({
@@ -1172,9 +1173,9 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div id="admin-container">
+    <div id="admin-container" style={isDemoAdmin && showDemoBanner ? { paddingTop: '2.2rem' } : {}}>
       {/* Banner demo admin solo lectura */}
-      {isDemoAdmin && (
+      {isDemoAdmin && showDemoBanner && (
         <div style={{
           position: 'fixed',
           top: 0,
@@ -1184,13 +1185,31 @@ const AdminDashboard = () => {
           background: 'linear-gradient(90deg, #ff6b35, #f7931e)',
           color: 'white',
           textAlign: 'center',
-          padding: '0.6rem 1rem',
-          fontSize: '0.9rem',
+          padding: '0.3rem 2.5rem 0.3rem 1rem',
+          fontSize: '0.78rem',
           fontWeight: 'bold',
-          boxShadow: '0 2px 8px rgba(255,107,53,0.5)'
+          boxShadow: '0 2px 8px rgba(255,107,53,0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '0.5rem'
         }}>
-          🔒 Modo Demo (Solo Lectura) — Puedes ver todo el panel pero no modificar datos.
-          Para acceso completo, instala el proyecto en local.
+          <span>🔒 Modo Demo (Solo Lectura) — Solo vista, sin modificar datos.</span>
+          <button
+            onClick={() => setShowDemoBanner(false)}
+            style={{
+              position: 'absolute',
+              right: '0.6rem',
+              background: 'transparent',
+              border: 'none',
+              color: 'white',
+              fontSize: '1rem',
+              cursor: 'pointer',
+              lineHeight: 1,
+              padding: '0 0.3rem'
+            }}
+            title="Cerrar aviso"
+          >✕</button>
         </div>
       )}
       {/* Header móvil con botones de sesión */}
