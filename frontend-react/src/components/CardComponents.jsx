@@ -9,7 +9,9 @@ export const EjercicioCard = ({ ejercicio, onClickEjercicio }) => {
     >
       <div className="card ejercicio-card">
         <div className="equipamiento-icon">
-          {ejercicio.equipamiento === 'casa' ? '🏠' : '🏋️'}
+          <span className="equipamiento-icon-emoji">
+            {ejercicio.equipamiento === 'casa' ? '🏠' : '🏋️'}
+          </span>
         </div>
         <h3>{ejercicio.nombre}</h3>
         <div className="ejercicio-tags">

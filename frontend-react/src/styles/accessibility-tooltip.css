@@ -48,3 +48,10 @@ body.accesible button[aria-pressed]:focus {
   border: 3px solid #fff !important;
   outline: 2px solid #fff !important;
 }
+
+@media (max-width: 768px) {
+  .accessibility-widget-container {
+    bottom: calc(78px + env(safe-area-inset-bottom, 0px)) !important;
+    right: 12px !important;
+  }
+}
