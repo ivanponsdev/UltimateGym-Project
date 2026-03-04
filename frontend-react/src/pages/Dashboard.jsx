@@ -1375,7 +1375,7 @@ const Dashboard = () => {
                       <div className="imagen-tecnica-container">
                         {ejercicioSeleccionado.imagenTecnica ? (
                           <img 
-                            src={ejercicioSeleccionado.imagenTecnica}
+                            src={`${BACKEND_URL}/${ejercicioSeleccionado.imagenTecnica.replace(/\\/g, '/').replace(/^backend\//, '')}`}
                             alt={`Técnica de ${ejercicioSeleccionado.nombre}`}
                             className="imagen-tecnica"
                             onError={(e) => {
