@@ -267,6 +267,24 @@ body.accesible input {
   min-width: 44px !important;
 }
 
+/* Excepción específica: botón de inscripción en tarjetas de clases */
+body.accesible .btn-inscribir {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  min-height: 44px !important;
+  padding: 8px 10px !important;
+  font-size: 0.9em !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.01em !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  word-break: normal !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
 /* Sin transiciones bruscas - cambios instantáneos */
 body.accesible {
   transition: none !important;
