@@ -331,6 +331,7 @@ const Dashboard = () => {
   const [hasCompletedFirstSetup, setHasCompletedFirstSetup] = useState(false) // Ya guardó la primera vez
   const [requiresPasswordChange, setRequiresPasswordChange] = useState(false) // Admin cambió contraseña
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
+  const [showDemoBanner, setShowDemoBanner] = useState(true)
   const [profileData, setProfileData] = useState({
     nombre: '',
     edad: '',
@@ -840,7 +841,45 @@ const Dashboard = () => {
   }
 
   return (
-    <div id="app-container">
+    <div id="app-container" style={isDemo && showDemoBanner ? { paddingTop: '2.2rem' } : {}}>
+      {/* Banner demo usuario solo lectura */}
+      {isDemo && showDemoBanner && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 9999,
+          background: 'linear-gradient(90deg, #ff6b35, #f7931e)',
+          color: 'white',
+          textAlign: 'center',
+          padding: '0.3rem 2.5rem 0.3rem 1rem',
+          fontSize: '0.78rem',
+          fontWeight: 'bold',
+          boxShadow: '0 2px 8px rgba(255,107,53,0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '0.5rem'
+        }}>
+          <span>🔒 Modo Demo — Puedes probar clases con normalidad, pero no modificar los datos de la cuenta.</span>
+          <button
+            onClick={() => setShowDemoBanner(false)}
+            style={{
+              position: 'absolute',
+              right: '0.6rem',
+              background: 'transparent',
+              border: 'none',
+              color: 'white',
+              fontSize: '1rem',
+              cursor: 'pointer',
+              lineHeight: 1,
+              padding: '0 0.3rem'
+            }}
+            title="Cerrar aviso"
+          >✕</button>
+        </div>
+      )}
       {/* Header móvil con botones de sesión */}
       {isMobile && (
         <div className="mobile-header">
@@ -861,19 +900,7 @@ const Dashboard = () => {
       <main className="content">
         {activeSection === 'profile' && (
           <section id="profile" className="content-section active">
-            {isDemo && (
-              <div
-                className="card"
-                style={{
-                  marginBottom: '1rem',
-                  border: '1px solid var(--secondary-color)',
-                  minHeight: 'auto',
-                  display: 'block'
-                }}
-              >
-                <strong>Modo demo:</strong> puedes probar clases con normalidad, pero no modificar los datos de la cuenta.
-              </div>
-            )}
+
             <h2>Tu Perfil</h2>
             <div className="card">
               {!isEditingProfile ? (
